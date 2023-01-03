@@ -1,7 +1,6 @@
 // Selection sort in C
 
-#include "../libft/libft.h"
-#include <stdio.h>
+#include "push_swap.h"
 
 // function to swap the the position of two elements
 void	swap(int *a, int *b)
@@ -67,35 +66,103 @@ void	printArray(int array[], int size)
 	printf("\n");
 }
 
-// driver code
+t_stack	*ft_new(int content, int top)
+{
+	t_stack	*new_node;
+
+	new_node = (t_stack *)malloc(sizeof(t_stack));
+	if (!new_node)
+		return (NULL);
+	new_node->next = NULL;
+	new_node->item = content;
+	new_node->top = top;
+	return (new_node);
+}
+
+void	ft_stack_add_front(t_stack **stack, t_stack *head)
+{
+	head->next = *stack;
+	*stack = head;
+}
+
+void	print_stack(t_stack *s)
+{
+	printf("\t<<<Stack>>>\n");
+	while (s != NULL)
+	{
+		printf("%d\t top=%d\n", s->item, s->top);
+		s = s->next;
+	}
+}
+int	find_largest_num(t_stack *head)
+{
+	int	max;
+
+	max = INT_MIN;
+	while (head != NULL)
+	{
+		if (max < head->item)
+			max = head->item;
+		head = head->next;
+	}
+	return (max);
+}
+
+int	find_smallest_num(t_stack *head)
+{
+	int	min;
+
+	min = INT_MAX;
+	while (head != NULL)
+	{
+		if (min > head->item)
+			min = head->item;
+		head = head->next;
+	}
+	return (min);
+}
+
+void	ft_swap(int *a, int *b)
+{
+	int	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void	swap_a(t_stack *stack)
+{
+	t_stack	*temp;
+
+	temp = stack;
+	if (temp != NULL && temp->next != NULL)
+		ft_swap(&temp->item, &temp->next->item);
+}
 int	main(int argc, char **argv)
 {
-	t_list *input;
-	t_list *new_node;
+	t_stack *stack_a = NULL;
+	t_stack *stack_b = NULL;
+	t_stack *new_node;
 	int num;
+	int top = -1;
+
 	if (argc > 1)
 	{
 		int i = 1;
 		while (i < argc)
 		{
-			// if (ft_isdigit(*argv[i]))
-			// {
-				num = ft_atoi(argv[i]);
-				new_node = ft_lstnew(num);
-				ft_lstadd_back(&input, new_node);
-				i++;
-			// }
+			top++;
+			num = ft_atoi(argv[i]);
+			new_node = ft_new(num, top);
+			printf("%d\n", new_node->item);
+			ft_stack_add_front(&stack_a, new_node);
+			i++;
 		}
-		while (input)
-		{
-			printf("%d\n", input->content);
-			input = input->next;
-		}
-
-		// int size = sizeof(argv) / sizeof(argv[1]);
-		// //   selectionSort(data, size);
-		// insertionSort(argv[1], size);
-		// printf("Sorted array in Ascending Order:\n");
-		// printArray(data, size);
+		print_stack(stack_a);
+		swap_a(stack_a);
+		print_stack(stack_a);
+		// printf("\nlargest=%d\n", find_largest_num(stack_a));
+		// printf("\nsmallest=%d\n", find_smallest_num(stack_a));
 	}
 }
