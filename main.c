@@ -19,6 +19,7 @@ int	main(int argc, char **argv)
 	int			num;
 	int			top;
 	int			i;
+	int			size;
 
 	// variable_list.stack_a = stack_a;
 	if (argc > 1)
@@ -29,14 +30,12 @@ int	main(int argc, char **argv)
 			if (ft_isdigit(*argv[i]) || *argv[i] == '-' || *argv[i] == '+')
 			{
 				num = ft_atoi(argv[i]);
-				// new_node = new_circular_doubly(num);
 				if (check_doubles(variable_list.stack_a, num))
 				{
 					printf("doubles");
 					return (0);
 				}
-				variable_list.stack_a = add_at_begin(variable_list.stack_a,
-														num);
+				add_last(&variable_list.stack_a, num);
 				i++;
 			}
 			else
@@ -45,16 +44,40 @@ int	main(int argc, char **argv)
 				return (0);
 			}
 		}
+		size = stack_size(variable_list.stack_a);
+		if (is_sorted(variable_list.stack_a))
+		{
+			printf("sorted\n");
+			print_dll(variable_list.stack_a);
+			return (0);
+		}
+		if (size <= 3)
+		{
+			print_dll(variable_list.stack_a);
+			random_three_num(&variable_list.stack_a);
+			printf("print_stack(stack_a)\n");
+			print_dll(variable_list.stack_a);
+			return (0);
+		}
+		else if (size < 6)
+		{
+			// printf("\nmain.stack_a\n");
+			// print_dll(variable_list.stack_a);
+			// rra(&variable_list.stack_a);
+			random_five_num(&variable_list);
+		}
+		printf("\nmain.stack_a\n");
 		print_dll(variable_list.stack_a);
+		printf("\nmain.stack_b\n");
+		print_dll(variable_list.stack_b);
+		// pa(variable_list.stack_b,variable_list.stack_a);
+		// pa(variable_list.stack_b,variable_list.stack_a);
 		// print_stack(variable_list.stack_a);
-		random_three_num(&variable_list.stack_a);
-		print_dll(variable_list.stack_a);
 		// random_five_num(&variable_list);
 		// swap_stack(stack_a);
 		// rrotate_stack(&variable_list.stack_a);
 		// push_top_to_another(&stack_b, &stack_a);
 		// swap_stack(variable_list.stack_a);
-		// printf("print_stack(stack_a)\n");
 		// print_stack(stack_a);
 		// printf("print_stack(stack_b)\n");
 		// print_stack(stack_b);
@@ -68,3 +91,19 @@ int	main(int argc, char **argv)
 		// printf("\nsmallest=%d\n", find_smallest_num(stack_a));
 	}
 }
+
+/* Debugging
+		printf("debugging\n");
+		sa(stack);
+		print(*stack);
+		printf("head=%d\ttail=%d head->p->p %d head->n->n=%d\n", (*stack)->data,
+				(*stack)->prev->data, (*stack)->prev->prev->data,
+				(*stack)->next->next->data);
+		printf("----------------------------------------------------------------\n");
+		rra(stack);
+		print(*stack);
+		printf("head=%d\ttail=%d head->p->p %d head->n=%d\n", (*stack)->data,
+				(*stack)->prev->data, (*stack)->prev->prev->data,
+				(*stack)->next->data);
+
+*/

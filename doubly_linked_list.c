@@ -22,6 +22,32 @@ t_dll_stack	*new_circular_doubly(int data)
 	new_node->prev = new_node;
 	return (new_node);
 }
+void	insertBegin(t_dll_stack **head, int value)
+{
+	t_dll_stack	*new_node;
+	t_dll_stack	*tail;
+
+	// Pointer points to last Node
+	new_node = new_circular_doubly(value);
+	if (*head == NULL)
+	{
+		*head = new_node;
+		return ;
+	}
+	tail = (*head)->prev;
+	// setting up previous and next of new node
+	new_node->prev = tail;
+	new_node->next = (*head);
+	(*head)->prev = new_node;
+	tail->next = new_node;
+	// Update next and previous pointers of start
+	// and last.
+	// Update start pointer
+	(*head) = new_node;
+	printf("new=%d \thead=%d\ttail=%d\n", new_node->data, (*head)->data,
+			tail->data);
+	return ;
+}
 
 t_dll_stack	*add_at_begin(t_dll_stack *tail, int data)
 {
@@ -42,36 +68,56 @@ t_dll_stack	*add_at_begin(t_dll_stack *tail, int data)
 	return (tail);
 }
 
-t_dll_stack	*del_first(t_dll_stack *tail)
+void	*del_first(t_dll_stack **head)
 {
+	t_dll_stack	*tail;
 	t_dll_stack	*temp;
 
-	if (tail == NULL)
-		return (tail);
-	temp = tail->next;
-	if (temp == tail)
+	if (*head == NULL)
+		return (0);
+	tail = (*head)->prev;
+	temp = (*head)->next;
+	// if (tail == temp)
+	// {
+	// 	free(*head);
+	// 	*head = tail;
+	// 	return (0);
+	// }
+	if (temp->next == tail)
 	{
-		free(tail);
-		tail = NULL;
-		return (tail);
+		temp->next = tail;
+		temp->prev = tail;
+		tail->next = temp;
+		tail->prev = temp;
+		return (0);
 	}
-	tail->next = temp->next;
-	temp->next->prev = tail;
-	free(temp);
-	return (tail);
+	tail->next = temp;
+	temp->prev = tail;
+	printf("del=%d \thead=%d\ttail=%d\n", (*head)->data, temp->data,
+			tail->data);
+	free(*head);
+	(*head) = temp;
+	return (0);
 }
 
-int	stack_size(t_dll_stack *head)
+int	stack_size(t_dll_stack *tail)
 {
+	t_dll_stack	*temp;
 	int			count;
-	t_dll_stack	*curr;
 
 	count = 0;
-	curr = head;
-	while (curr != NULL)
+	if (tail == NULL)
+		printf("No element is the list\n");
+	else
 	{
-		count++;
-		curr = curr->next;
+		temp = tail->next;
+		while (temp)
+		{
+			temp = temp->next;
+			count++;
+			if (temp == tail->next)
+				break ;
+		}
 	}
 	return (count);
 }
@@ -100,70 +146,91 @@ t_dll_stack	*insert_after(t_dll_stack *tail, int data, int pos)
 	return (tail);
 }
 
-t_dll_stack	*add_last(t_dll_stack *tail, int data)
+void	add_last(t_dll_stack **head, int data)
 {
 	t_dll_stack	*new_node;
-	t_dll_stack	*temp;
+	t_dll_stack	*tail;
 
 	new_node = new_circular_doubly(data);
-	if (tail == NULL)
-		return (new_node);
-	temp = tail->next;
-	new_node->next = temp;
-	new_node->prev = tail;
+	if (*head == NULL)
+	{
+		*head = new_node;
+		return ;
+	}
+	tail = (*head)->prev;
 	tail->next = new_node;
-	temp->prev = new_node;
-	tail = new_node;
-	return (tail);
+	new_node->next = (*head);
+	(*head)->prev = new_node;
 }
 
-t_dll_stack	*rotate_dll(t_dll_stack *tail)
+void	rotate_dll(t_dll_stack **head)
 {
 	t_dll_stack	*temp;
 
-	temp = tail->next;
-	if (tail == NULL)
-		return (tail);
-	return (temp);
+	if (*head == NULL)
+		return ;
+	temp = (*head)->next;
+	(*head) = temp;
 }
-t_dll_stack	*rrotate_dll(t_dll_stack *tail)
+static void	print(t_dll_stack *head)
+{
+	t_dll_stack	*tail;
+
+	tail = head->prev;
+	while (head != tail)
+	{
+		printf("content: %d\n", head->data);
+		head = head->next;
+	}
+	printf("content: %d\n", head->data);
+}
+void	rrotate_dll(t_dll_stack **head)
+{
+	t_dll_stack	*tail;
+	t_dll_stack	*tmp;
+
+	if (*head == NULL)
+		return ;
+	tail = (*head)->prev;
+	(*head) = tail;
+	tmp = (*head)->prev;
+	tail = tmp;
+}
+
+void	swap_dll(t_dll_stack **head)
 {
 	t_dll_stack	*temp;
+	t_dll_stack	*tail;
 
-	temp = tail->prev;
-	if (tail == NULL)
-		return (tail);
-	return (temp);
-}
-
-
-t_dll_stack	*swap_dll(t_dll_stack *tail)
-{
-	t_dll_stack	*temp;
-	t_dll_stack	*temp2;
-
-	if (tail == NULL)
-		return (tail);
-	temp = tail->next;
-	temp2 = temp->next;
-	if (temp2 == tail)
-		return (temp);
-	temp = temp2;
-	temp2 = temp;
-	return (tail);
+	if (head == NULL)
+		return ;
+	temp = (*head)->next;
+	tail = (*head)->prev;
+	if (temp == tail)
+	{
+		(*head) = temp;
+		return ;
+	}
+	temp->next->prev = (*head);
+	(*head)->next = temp->next;
+	(*head)->prev = temp;
+	temp->next = (*head);
+	temp->prev = tail;
+	(*head) = temp;
+	tail->next = (*head);
 }
 
 void	push_top_to_dll(t_dll_stack **dst, t_dll_stack **src)
 {
-	t_dll_stack *head_src;
-
+	// t_dll_stack	*head_src;
 	if (*src != NULL)
 	{
-		head_src = (*src)->next;
-		*dst = add_at_begin(*dst,head_src->data);
-		*src = del_first((*src));
+		// head_src = (*src)->next;
+		// *dst = add_at_begin(*dst,(*src)->data);
+		insertBegin(dst, (*src)->data);
+		del_first(src);
 	}
-
+	// printf("p_head=%d\t_tail=%d\n", (*dst)->data, (*dst)->prev->data);
 }
 
 t_dll_stack	*del_last(t_dll_stack *tail)
@@ -186,22 +253,21 @@ t_dll_stack	*del_last(t_dll_stack *tail)
 	return (tail);
 }
 
-void	print_dll(t_dll_stack *tail)
+void	print_dll(t_dll_stack *head)
 {
 	t_dll_stack	*temp;
 
-	if (tail == NULL)
+	if (head == NULL)
 		printf("No element is the list\n");
 	else
 	{
-		temp = tail->next;
-		while (temp)
+		temp = head;
+		while (temp->next != head)
 		{
 			printf("%d\n", temp->data);
 			temp = temp->next;
-			if (temp == tail->next)
-				return ;
 		}
+		printf("%d\n", temp->data);
 	}
 }
 
@@ -227,48 +293,105 @@ t_dll_stack	*del_inter(t_dll_stack *tail, int pos)
 	return (tail);
 }
 
+int	find_largest_num(t_dll_stack *tail)
+{
+	int			max;
+	int			index;
+	t_dll_stack	*temp;
+
+	index = 0;
+	max = INT_MIN;
+	// max = head->item;
+	temp = tail->next;
+	while (temp)
+	{
+		if (max < temp->data)
+		{
+			max = temp->data;
+			index++;
+		}
+		temp = temp->next;
+		if (temp == tail)
+			break ;
+	}
+	printf("Max=%d\n", max);
+	return (index);
+}
+
+int	find_smallest_num(t_dll_stack *tail)
+{
+	int			min;
+	int			index;
+	t_dll_stack	*temp;
+
+	index = 0;
+	min = INT_MAX;
+	// min = head->item;
+	temp = tail->next;
+	while (tail != NULL)
+	{
+		if (min > tail->data)
+		{
+			min = tail->data;
+			index++;
+		}
+		tail = tail->next;
+		if (temp == tail)
+			break ;
+	}
+	printf("Min=%d\n", min);
+	return (index);
+}
+
+bool	is_sorted(t_dll_stack *head)
+{
+	t_dll_stack	*temp;
+
+	if (head == NULL)
+		return (true);
+	temp = head;
+	while (temp->next != head)
+	{
+		if (temp->data > temp->next->data)
+			return (false);
+		temp = temp->next;
+	}
+	return (true);
+}
 /* 
 int	main(void)
 {
 	t_dll_stack	*tail;
-	t_dll_stack *tail_b = NULL;
+	t_dll_stack	*tail2;
 
 	tail = NULL;
-	// Insert 6.  So linked list becomes 6->NULL
-	tail = add_last(tail, 4);
-	// Insert 7 at the beginning. So linked list becomes
-	// 7->6->NULL
-	tail = add_at_begin(tail, 1);
-	tail = insert_after(tail, 8, 2);
-	// Insert 1 at the beginning. So linked list becomes
-	// 1->7->6->NULL
-	// tail = add_at_begin(tail, 10);
-	// // Insert 4 at the end. So linked list becomes
-	// // 1->7->6->4->NULL
-	// tail = add_last(tail, 4);
-	// // Insert 8, after 7. So linked list becomes
-	// // 1->7->8->6->4->NULL
-	// tail = insert_after(tail, 3, 1);
-	printf("Created DLL is:\n");
-	// printf("stack_size= %d\n", stack_size(head));
+	tail2 = NULL;
+	insertBegin(&tail, 1);
+	insertBegin(&tail, 3);
+	insertBegin(&tail, 2);
+	// insertBegin(&tail, 4);
 	print_dll(tail);
-	// tail = del_inter(tail, 4);
-	// swap_list(tail);
-	printf("\nafter push\n");
-	push_top_to_dll(&tail_b,&tail);
-	push_top_to_dll(&tail_b,&tail);
-	push_top_to_dll(&tail_b,&tail);
-
-	// tail = rrotate_dll(tail);
-	// printf("\nafter delete\n");
-	// tail = del_first(tail);
-	print_dll(tail);
-	printf("\nstackB\n");
-
-	print_dll(tail_b);
-	// printf("\nafter delete last\n");
-	// tail = del_last(tail);
+	printf("\nhead =====%d\n", tail->data);
+	// swap_dll(&tail);
+	// swap_dll(&tail);
 	// print_dll(tail);
-	return (0);
+	// rrotate_dll(&tail);
+	// rrotate_dll(&tail);
+	// rrotate_dll(&tail);
+	random_three_num(&tail);
+	printf("\nhead =====%d\n", tail->data);
+	print_dll(tail);
+	// pb(&tail2, &tail);
+	// pb(&tail2, &tail);
+	// printf("\nstack2\n");
+	// print_dll(tail2);
+	// printf("\nstack1\n");
+	// print_dll(tail);
+	// pa(&tail, &tail2);
+	// printf("\nstack1\n");
+	// print_dll(tail);
+	// printf("\nstack2\n");
+	// print_dll(tail2);
+	// printf("index of max=%d",find_largest_num(tail));
 }
  */

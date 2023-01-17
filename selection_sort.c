@@ -33,7 +33,7 @@ void	print_stack(t_stack *s)
 	}
 }
 
-int	find_largest_num(t_stack *head)
+/* int	find_largest_num(t_stack *head)
 {
 	int	max;
 	int	index;
@@ -73,7 +73,7 @@ int	find_smallest_num(t_stack *head)
 	}
 	printf("s=%d\n", min);
 	return (index);
-}
+} */
 
 t_stack	*ft_lststack(t_stack *lst)
 {

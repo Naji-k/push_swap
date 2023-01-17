@@ -14,39 +14,42 @@
 
 void	sa(t_dll_stack **stack)
 {
-	*stack = swap_dll(*stack);
-	print_dll(*stack);
+	swap_dll(stack);
 	ft_printf("sa\n");
 }
 
-
 void	pa(t_dll_stack **dst, t_dll_stack **src)
 {
-	push_top_to_dll(dst,src);
+	push_top_to_dll(dst, src);
 	ft_printf("pa\n");
 }
 
-void	ra(t_dll_stack *stack)
+void	pb(t_dll_stack **dst, t_dll_stack **src)
 {
-	stack = rotate_dll(stack);
+	push_top_to_dll(dst, src);
+	ft_printf("pb\n");
+}
+
+void	ra(t_dll_stack **stack)
+{
+	rotate_dll(stack);
 	ft_printf("ra\n");
 }
 
-void	rb(t_dll_stack *stack)
+void	rb(t_dll_stack **stack)
 {
-	stack = rotate_dll(stack);
+	rotate_dll(stack);
 	ft_printf("rb\n");
 }
 
-void	rra(t_dll_stack *stack)
+void	rra(t_dll_stack **stack)
 {
-	stack = rrotate_dll(stack);
+	rrotate_dll(stack);
 	ft_printf("rra\n");
 }
 
-void	rrb(t_dll_stack *stack)
+void	rrb(t_dll_stack **stack)
 {
-	stack = rrotate_dll(stack);
+	rrotate_dll(stack);
 	ft_printf("rrb\n");
 }
-
