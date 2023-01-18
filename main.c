@@ -15,13 +15,12 @@
 int	main(int argc, char **argv)
 {
 	t_var_list	variable_list;
-	t_dll_stack	*new_node;
 	int			num;
-	int			top;
 	int			i;
 	int			size;
 
-	// variable_list.stack_a = stack_a;
+	variable_list.stack_a = NULL;	//from home get segfault because this line was not exist~
+	variable_list.stack_b = NULL;	//from home get segfault because this line was not exist~
 	if (argc > 1)
 	{
 		i = 1;
@@ -53,10 +52,10 @@ int	main(int argc, char **argv)
 		}
 		if (size <= 3)
 		{
-			print_dll(variable_list.stack_a);
+			print(variable_list.stack_a);
 			random_three_num(&variable_list.stack_a);
 			printf("print_stack(stack_a)\n");
-			print_dll(variable_list.stack_a);
+			print(variable_list.stack_a);
 			return (0);
 		}
 		else if (size < 6)

@@ -12,39 +12,48 @@
 
 #include "push_swap.h"
 
-void	insert_in_sorted_list(t_var_list *variable_list)
+int	insert_in_sorted_list(t_var_list *variable_list)
 {
-	t_dll_stack	*temp;
-	t_dll_stack	*headA;
+	int	counter;
 
-	if (variable_list->stack_a == NULL)
+	counter = 0;
+	if (variable_list->stack_b != NULL
+		&& variable_list->stack_b->data > variable_list->stack_a->prev->data)
+	{ //if headB > tailA
+		pa(&variable_list->stack_a, &variable_list->stack_b);
+		ra(&variable_list->stack_a);
+		print(variable_list->stack_a);
+	}
+	else if (variable_list->stack_b != NULL
+			&& variable_list->stack_b->data < variable_list->stack_a->data)
 	{
 		pa(&variable_list->stack_a, &variable_list->stack_b);
-		return ;
 	}
-	temp = variable_list->stack_a;
-	headA = variable_list->stack_a;
-	while (temp->next != headA && temp->data < variable_list->stack_b->data)
+	while (variable_list->stack_b != NULL
+		&& variable_list->stack_b->data > variable_list->stack_a->data)
 	{
 		ra(&variable_list->stack_a);
-		temp = temp->next;
+		counter++;
+		if (variable_list->stack_b->data < variable_list->stack_a->next->data)
+			pa(&variable_list->stack_a, &variable_list->stack_b);
+		if (variable_list->stack_b == NULL)
+			return (counter);
 	}
-	pa(&variable_list->stack_a, &variable_list->stack_b);
-	printf("here\n");
+	return (counter);
 }
 
-static void	print(t_dll_stack *head)
-{
-	t_dll_stack	*tail;
+// static void	print(t_dll_stack *head)
+// {
+// 	t_dll_stack	*tail;
 
-	tail = head->prev;
-	while (head != tail)
-	{
-		printf("content: %d\n", head->data);
-		head = head->next;
-	}
-	printf("content: %d\n", head->data);
-}
+// 	tail = head->prev;
+// 	while (head != tail)
+// 	{
+// 		printf("content: %d\n", head->data);
+// 		head = head->next;
+// 	}
+// 	printf("content: %d\n", head->data);
+// }
 
 void	random_three_num(t_dll_stack **stack)
 {
@@ -75,23 +84,22 @@ void	random_three_num(t_dll_stack **stack)
 
 void	random_five_num(t_var_list *variable_list)
 {
-	int	counter;
-	int	size_a;
-
 	pb(&variable_list->stack_b, &variable_list->stack_a);
 	pb(&variable_list->stack_b, &variable_list->stack_a);
-	print_dll(variable_list->stack_b);
+	print(variable_list->stack_b);
 	random_three_num(&variable_list->stack_a);
 	printf("\n(finish 3 sort)\n");
-	print_dll(variable_list->stack_a);
-	counter = 0;
-	if (variable_list->stack_b->data > variable_list->stack_a->prev->data)
-	{
-		pa(&variable_list->stack_a, &variable_list->stack_b);
-		ra(&variable_list->stack_a);
-	}
-
+	print(variable_list->stack_a);
 	insert_in_sorted_list(variable_list);
+
+
+	printf("out of sort 5\n");
+	print(variable_list->stack_a);
+	if (is_sorted(variable_list->stack_a))
+		printf("sorted");
+	else
+		printf("NOT_sorted");
+	// insert_in_sorted_list(variable_list);
 	// else if (variable_list->stack_b->data > variable_list->stack_a->prev->data)
 	// {
 	// 	pa(&variable_list->stack_a, &variable_list->stack_b);
@@ -102,4 +110,3 @@ void	random_five_num(t_var_list *variable_list)
 	// printf("\nstack_b\n");
 	// print_dll(variable_list->stack_b);
 }
-

@@ -59,7 +59,7 @@ void					random_five_num(t_var_list *variable_list);
 t_dll_stack				*new_circular_doubly(int data);
 t_dll_stack				*add_at_begin(t_dll_stack *tail, int data);
 void					add_last(t_dll_stack **head, int data);
-void					*del_first(t_dll_stack **head);
+void					del_first(t_dll_stack **head);
 t_dll_stack				*del_last(t_dll_stack *tail);
 t_dll_stack				*insert_after(t_dll_stack *tail, int data, int pos);
 t_dll_stack				*del_inter(t_dll_stack *tail, int pos);
@@ -77,4 +77,5 @@ int						find_smallest_num(t_dll_stack *tail);
 void					pa(t_dll_stack **dst, t_dll_stack **src);
 void					pb(t_dll_stack **dst, t_dll_stack **src);
 bool					is_sorted(t_dll_stack *head);
+void					print(t_dll_stack *head);
 #endif

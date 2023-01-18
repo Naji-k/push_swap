@@ -44,8 +44,8 @@ void	insertBegin(t_dll_stack **head, int value)
 	// and last.
 	// Update start pointer
 	(*head) = new_node;
-	printf("new=%d \thead=%d\ttail=%d\n", new_node->data, (*head)->data,
-			tail->data);
+	// printf("new=%d \thead=%d\ttail=%d\n", new_node->data, (*head)->data,
+	// 		tail->data);
 	return ;
 }
 
@@ -68,36 +68,36 @@ t_dll_stack	*add_at_begin(t_dll_stack *tail, int data)
 	return (tail);
 }
 
-void	*del_first(t_dll_stack **head)
+void	del_first(t_dll_stack **head)
 {
 	t_dll_stack	*tail;
 	t_dll_stack	*temp;
 
-	if (*head == NULL)
-		return (0);
 	tail = (*head)->prev;
 	temp = (*head)->next;
-	// if (tail == temp)
-	// {
-	// 	free(*head);
-	// 	*head = tail;
-	// 	return (0);
-	// }
-	if (temp->next == tail)
+	if (*head == NULL)
+		return ;
+	else if ( *head == temp)//only 1 node
 	{
-		temp->next = tail;
+		free(*head);
+		*head = NULL;
+		return ;
+	}
+	else if (temp == tail) //only 2 nodes
+	{
+		temp->next = temp;
+		temp->prev = temp;
+		free(*head);
+		(*head) = temp;
+		return;
+	}
+	else {
 		temp->prev = tail;
 		tail->next = temp;
-		tail->prev = temp;
-		return (0);
+		free(*head);
+		*head = temp;
+		return;
 	}
-	tail->next = temp;
-	temp->prev = tail;
-	printf("del=%d \thead=%d\ttail=%d\n", (*head)->data, temp->data,
-			tail->data);
-	free(*head);
-	(*head) = temp;
-	return (0);
 }
 
 int	stack_size(t_dll_stack *tail)
@@ -172,10 +172,15 @@ void	rotate_dll(t_dll_stack **head)
 	temp = (*head)->next;
 	(*head) = temp;
 }
-static void	print(t_dll_stack *head)
+void	print(t_dll_stack *head)
 {
 	t_dll_stack	*tail;
 
+	if (head == NULL)
+	{
+		printf("stack is empty!");
+		return;
+	}
 	tail = head->prev;
 	while (head != tail)
 	{
@@ -230,6 +235,7 @@ void	push_top_to_dll(t_dll_stack **dst, t_dll_stack **src)
 		insertBegin(dst, (*src)->data);
 		del_first(src);
 	}
+	return ;
 	// printf("p_head=%d\t_tail=%d\n", (*dst)->data, (*dst)->prev->data);
 }
 
@@ -366,11 +372,11 @@ int	main(void)
 
 	tail = NULL;
 	tail2 = NULL;
-	insertBegin(&tail, 1);
-	insertBegin(&tail, 3);
-	insertBegin(&tail, 2);
-	// insertBegin(&tail, 4);
-	print_dll(tail);
+	add_last(&tail, 1);
+	// add_last(&tail, 3);
+	add_last(&tail, 2);
+	add_last(&tail, 4);
+	print(tail);
 	printf("\nhead =====%d\n", tail->data);
 	// swap_dll(&tail);
 	// swap_dll(&tail);
@@ -378,11 +384,26 @@ int	main(void)
 	// rrotate_dll(&tail);
 	// rrotate_dll(&tail);
 	// rrotate_dll(&tail);
-	random_three_num(&tail);
+	// random_three_num(&tail);
 	printf("\nhead =====%d\n", tail->data);
-	print_dll(tail);
+	print(tail);
 	// pb(&tail2, &tail);
 	// pb(&tail2, &tail);
+	del_first(&tail);
+	printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	print(tail);
+	del_first(&tail);
+	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	print(tail);
+	del_first(&tail);
+	printf("debugging\n");
+	print(tail);
+	printf("\ndel3_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	// print(tail);
+	// print(tail2);
+	// print(tail2);
+	// printf("\ndel_head =====%d\n", tail->data);
+	// print_dll(tail);
 	// printf("\nstack2\n");
 	// print_dll(tail2);
 	// printf("\nstack1\n");
