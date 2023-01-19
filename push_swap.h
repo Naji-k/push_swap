@@ -35,6 +35,7 @@ typedef struct s_variable_list
 {
 	t_dll_stack			*stack_a;
 	t_dll_stack			*stack_b;
+	int					*array;
 }						t_var_list;
 
 t_stack					*ft_new(int content, int top);
@@ -68,6 +69,8 @@ void					rotate_dll(t_dll_stack **head);
 void					rrotate_dll(t_dll_stack **head);
 void					push_top_to_dll(t_dll_stack **dst, t_dll_stack **src);
 void					print_dll(t_dll_stack *head);
+void					multi_rra(t_dll_stack **stack, int times);
+void					multi_ra(t_dll_stack **stack, int times);
 
 void					insertBegin(t_dll_stack **tail, int value);
 void					swap_dll(t_dll_stack **head);
@@ -78,4 +81,8 @@ void					pa(t_dll_stack **dst, t_dll_stack **src);
 void					pb(t_dll_stack **dst, t_dll_stack **src);
 bool					is_sorted(t_dll_stack *head);
 void					print(t_dll_stack *head);
+int						top_level(t_dll_stack **stack, int key);
+//arr
+void					insert_arr(t_var_list *variable_list, int size);
+void					print_array(int *arr, int size);
 #endif

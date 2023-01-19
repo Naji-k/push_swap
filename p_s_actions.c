@@ -20,8 +20,11 @@ void	sa(t_dll_stack **stack)
 
 void	pa(t_dll_stack **dst, t_dll_stack **src)
 {
-	push_top_to_dll(dst, src);
-	ft_printf("pa\n");
+	if (*src != NULL)
+	{
+		push_top_to_dll(dst, src);
+		ft_printf("pa\n");
+	}
 }
 
 void	pb(t_dll_stack **dst, t_dll_stack **src)
@@ -34,6 +37,22 @@ void	ra(t_dll_stack **stack)
 {
 	rotate_dll(stack);
 	ft_printf("ra\n");
+}
+void	multi_ra(t_dll_stack **stack, int times)
+{
+	while (times >= 0)
+	{
+		ra(stack);
+		times--;
+	}
+}
+void	multi_rra(t_dll_stack **stack, int times)
+{
+	while (times > 0)
+	{
+		rra(stack);
+		times--;
+	}
 }
 
 void	rb(t_dll_stack **stack)

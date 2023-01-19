@@ -77,7 +77,7 @@ void	del_first(t_dll_stack **head)
 	temp = (*head)->next;
 	if (*head == NULL)
 		return ;
-	else if ( *head == temp)//only 1 node
+	else if (*head == temp) //only 1 node
 	{
 		free(*head);
 		*head = NULL;
@@ -89,36 +89,33 @@ void	del_first(t_dll_stack **head)
 		temp->prev = temp;
 		free(*head);
 		(*head) = temp;
-		return;
+		return ;
 	}
-	else {
+	else
+	{
 		temp->prev = tail;
 		tail->next = temp;
 		free(*head);
 		*head = temp;
-		return;
+		return ;
 	}
 }
 
-int	stack_size(t_dll_stack *tail)
+int	stack_size(t_dll_stack *head)
 {
-	t_dll_stack	*temp;
+	t_dll_stack	*tail;
 	int			count;
 
 	count = 0;
-	if (tail == NULL)
-		printf("No element is the list\n");
-	else
+	if (head == NULL)
+		return (count);
+	tail = head->prev;
+	while (head != tail)
 	{
-		temp = tail->next;
-		while (temp)
-		{
-			temp = temp->next;
-			count++;
-			if (temp == tail->next)
-				break ;
-		}
+		head = head->next;
+		count++;
 	}
+	count++;
 	return (count);
 }
 
@@ -160,17 +157,23 @@ void	add_last(t_dll_stack **head, int data)
 	tail = (*head)->prev;
 	tail->next = new_node;
 	new_node->next = (*head);
+	new_node->prev = tail;
 	(*head)->prev = new_node;
 }
 
 void	rotate_dll(t_dll_stack **head)
 {
 	t_dll_stack	*temp;
+	t_dll_stack	*tail;
 
 	if (*head == NULL)
 		return ;
+	tail = (*head)->prev;
 	temp = (*head)->next;
-	(*head) = temp;
+	tail = (*head);
+	(*head) = (*head)->next;
+	(*head)->prev = tail;
+	tail->next = (*head);
 }
 void	print(t_dll_stack *head)
 {
@@ -179,7 +182,7 @@ void	print(t_dll_stack *head)
 	if (head == NULL)
 	{
 		printf("stack is empty!");
-		return;
+		return ;
 	}
 	tail = head->prev;
 	while (head != tail)
@@ -197,8 +200,10 @@ void	rrotate_dll(t_dll_stack **head)
 	if (*head == NULL)
 		return ;
 	tail = (*head)->prev;
+	tmp = tail->prev;
 	(*head) = tail;
-	tmp = (*head)->prev;
+	(*head)->prev = tmp;
+	tmp->next = (*head);
 	tail = tmp;
 }
 
@@ -373,11 +378,17 @@ int	main(void)
 	tail = NULL;
 	tail2 = NULL;
 	add_last(&tail, 1);
-	// add_last(&tail, 3);
+	add_last(&tail, 3);
 	add_last(&tail, 2);
 	add_last(&tail, 4);
+	add_last(&tail, 5);
+			printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
+					tail->data,
+				tail->prev->data, tail->prev->prev->data,
+				tail->next->data, tail->next->next->data);
 	print(tail);
 	printf("\nhead =====%d\n", tail->data);
+	exit(0);
 	// swap_dll(&tail);
 	// swap_dll(&tail);
 	// print_dll(tail);
@@ -387,18 +398,27 @@ int	main(void)
 	// random_three_num(&tail);
 	printf("\nhead =====%d\n", tail->data);
 	print(tail);
-	// pb(&tail2, &tail);
-	// pb(&tail2, &tail);
-	del_first(&tail);
-	printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	pb(&tail2, &tail);
+	pb(&tail2, &tail);
+	// del_first(&tail);
+	printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,
+			tail->next->data, tail->prev->data);
 	print(tail);
-	del_first(&tail);
-	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	ra(&tail);
+	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
+			tail->next->data, tail->prev->data);
 	print(tail);
-	del_first(&tail);
 	printf("debugging\n");
+	exit(0);
+	// del_first(&tail);
+	ra(&tail);
+	// del_first(&tail);
+	pa(&tail, &tail2);
+	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
+			tail->next->data, tail->prev->data);
 	print(tail);
-	printf("\ndel3_head%d==head.next=%d=head.prev=%d\n", tail->data,tail->next->data, tail->prev->data);
+	// printf("\ndel3_head%d==head.next=%d=head.prev=%d\n",
+			// tail->data,tail->next->data, tail->prev->data);
 	// print(tail);
 	// print(tail2);
 	// print(tail2);

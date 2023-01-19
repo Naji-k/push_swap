@@ -19,8 +19,10 @@ int	main(int argc, char **argv)
 	int			i;
 	int			size;
 
-	variable_list.stack_a = NULL;	//from home get segfault because this line was not exist~
-	variable_list.stack_b = NULL;	//from home get segfault because this line was not exist~
+	variable_list.stack_a = NULL;
+	//from home get segfault because this line was not exist~
+	variable_list.stack_b = NULL;
+	//from home get segfault because this line was not exist~
 	if (argc > 1)
 	{
 		i = 1;
@@ -60,15 +62,21 @@ int	main(int argc, char **argv)
 		}
 		else if (size < 6)
 		{
-			// printf("\nmain.stack_a\n");
-			// print_dll(variable_list.stack_a);
+			printf("\nrun random 5========\n");
+			print_dll(variable_list.stack_a);
 			// rra(&variable_list.stack_a);
 			random_five_num(&variable_list);
 		}
+		else {
+			printf("bigger than 5 size=%d\n",size);
+			insert_arr(&variable_list,size);
+			print_array(variable_list.array,size);
+
+		}
 		printf("\nmain.stack_a\n");
-		print_dll(variable_list.stack_a);
+		print(variable_list.stack_a);
 		printf("\nmain.stack_b\n");
-		print_dll(variable_list.stack_b);
+		print(variable_list.stack_b);
 		// pa(variable_list.stack_b,variable_list.stack_a);
 		// pa(variable_list.stack_b,variable_list.stack_a);
 		// print_stack(variable_list.stack_a);
@@ -95,6 +103,10 @@ int	main(int argc, char **argv)
 		printf("debugging\n");
 		sa(stack);
 		print(*stack);
+		printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n", (*head)->data,
+				(*head)->prev->data, (*head)->prev->prev->data,
+				(*head)->next->data, (*head)->next->next->data);
+				
 		printf("head=%d\ttail=%d head->p->p %d head->n->n=%d\n", (*stack)->data,
 				(*stack)->prev->data, (*stack)->prev->prev->data,
 				(*stack)->next->next->data);
