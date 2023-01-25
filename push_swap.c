@@ -14,32 +14,34 @@
 
 void	insert_in_sorted_list(t_var_list *variable_list)
 {
-	int			level;
-	t_dll_stack	*tail;
+	int	level;
 
 	level = 0;
 	while (variable_list->stack_b != NULL)
 	{
+		if (variable_list->stack_a == NULL)
+			pa(variable_list);
 		if (variable_list->stack_b != NULL
 			&& variable_list->stack_b->data > variable_list->stack_a->prev->data)
 		{ //if headB > tailA
-			pa(&variable_list->stack_a, &variable_list->stack_b);
+			// pa(&variable_list->stack_a, &variable_list->stack_b);
+			pa(variable_list);
 			ra(&variable_list->stack_a);
 		}
 		else if (variable_list->stack_b != NULL
 				&& variable_list->stack_b->data < variable_list->stack_a->data)
-			pa(&variable_list->stack_a, &variable_list->stack_b);
+			// pa(&variable_list->stack_a, &variable_list->stack_b);
+			pa(variable_list);
 		else
 		{
-			tail = variable_list->stack_a->prev;
 			while (variable_list->stack_b->data > variable_list->stack_a->data
 				&& variable_list->stack_b != NULL)
 			{
 				ra(&variable_list->stack_a);
 				level++;
 			}
-			pa(&variable_list->stack_a, &variable_list->stack_b);
-			multi_rra(&variable_list->stack_a, level);
+			pa(variable_list);
+			level = multi_rra(&variable_list->stack_a, level);
 		}
 	}
 }
@@ -62,20 +64,8 @@ int	top_level(t_dll_stack **stack, int key)
 	}
 	return (i);
 }
-// static void	print(t_dll_stack *head)
-// {
-// 	t_dll_stack	*tail;
 
-// 	tail = head->prev;
-// 	while (head != tail)
-// 	{
-// 		printf("content: %d\n", head->data);
-// 		head = head->next;
-// 	}
-// 	printf("content: %d\n", head->data);
-// }
-
-void	random_three_num(t_dll_stack **stack)
+void	random_three_num(t_var_list *variable_list, t_dll_stack **stack)
 {
 	int	bottom;
 	int	top;
@@ -85,17 +75,17 @@ void	random_three_num(t_dll_stack **stack)
 	mid = (*stack)->next->data;
 	bottom = (*stack)->prev->data;
 	if (top > mid && bottom > top)
-		sa(stack);
+		sa(variable_list);
 	else if (top > mid && mid > bottom && bottom < top)
 	{
-		sa(stack);
+		sa(variable_list);
 		rra(stack);
 	}
 	else if (top > mid && top > bottom && mid < bottom)
 		ra(stack);
 	else if (mid > top && mid > bottom && bottom > top)
 	{
-		sa(stack);
+		sa(variable_list);
 		ra(stack);
 	}
 	else if (mid > top && top > bottom && mid > bottom)
@@ -104,11 +94,11 @@ void	random_three_num(t_dll_stack **stack)
 
 void	random_five_num(t_var_list *variable_list)
 {
-	pb(&variable_list->stack_b, &variable_list->stack_a);
-	pb(&variable_list->stack_b, &variable_list->stack_a);
-	random_three_num(&variable_list->stack_a);
-	printf("\n(finish 3 sort)\n");
-	printf("==================\n");
+	pb(variable_list);
+	pb(variable_list);
+	random_three_num(variable_list, &variable_list->stack_a);
+	// printf("\n(finish 3 sort)\n");
+	// printf("==================\n");
 	insert_in_sorted_list(variable_list);
 	if (is_sorted(variable_list->stack_a))
 		printf("===sorted===\n");

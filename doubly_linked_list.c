@@ -379,15 +379,19 @@ int	main(void)
 	tail2 = NULL;
 	add_last(&tail, 1);
 	add_last(&tail, 3);
-	add_last(&tail, 2);
-	add_last(&tail, 4);
-	add_last(&tail, 5);
-			printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
-					tail->data,
-				tail->prev->data, tail->prev->prev->data,
-				tail->next->data, tail->next->next->data);
+	push_top_to_dll(&tail2,&tail);
+	push_top_to_dll(&tail2,&tail);
+	// add_last(&tail, 2);
+	// add_last(&tail, 4);
+	// add_last(&tail, 5);
+			// printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
+			// 		tail->data,
+			// 	tail->prev->data, tail->prev->prev->data,
+			// 	tail->next->data, tail->next->next->data);
 	print(tail);
-	printf("\nhead =====%d\n", tail->data);
+	in_range(0,15,tail);
+	printf(("stack_size= %d\n"),stack_size(tail));
+	// printf("\nhead =====%d\n", tail->data);
 	exit(0);
 	// swap_dll(&tail);
 	// swap_dll(&tail);
@@ -396,10 +400,10 @@ int	main(void)
 	// rrotate_dll(&tail);
 	// rrotate_dll(&tail);
 	// random_three_num(&tail);
-	printf("\nhead =====%d\n", tail->data);
+	// printf("\nhead =====%d\n", tail->data);
 	print(tail);
-	pb(&tail2, &tail);
-	pb(&tail2, &tail);
+	// pb(&tail2, &tail);
+	// pb(&tail2, &tail);
 	// del_first(&tail);
 	printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,
 			tail->next->data, tail->prev->data);
@@ -413,10 +417,10 @@ int	main(void)
 	// del_first(&tail);
 	ra(&tail);
 	// del_first(&tail);
-	pa(&tail, &tail2);
+	// pa(&tail, &tail2);
 	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
 			tail->next->data, tail->prev->data);
-	print(tail);
+	// print(tail);
 	// printf("\ndel3_head%d==head.next=%d=head.prev=%d\n",
 			// tail->data,tail->next->data, tail->prev->data);
 	// print(tail);

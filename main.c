@@ -12,19 +12,29 @@
 
 #include "push_swap.h"
 
+void	check_leaks(void)
+{
+	system("leaks -q a.out");
+}
+
 int	main(int argc, char **argv)
 {
 	t_var_list	variable_list;
 	int			num;
 	int			i;
 	int			size;
+	int			chunk;
+	t_indexing	vars;
 
+	// t_indexing	*list;
+	// int			*arr;
 	variable_list.stack_a = NULL;
 	//from home get segfault because this line was not exist~
 	variable_list.stack_b = NULL;
 	//from home get segfault because this line was not exist~
 	if (argc > 1)
 	{
+		// list = (t_indexing *)malloc(sizeof(t_indexing));
 		i = 1;
 		while (i < argc)
 		{
@@ -37,6 +47,8 @@ int	main(int argc, char **argv)
 					return (0);
 				}
 				add_last(&variable_list.stack_a, num);
+				// vars.array[i - 1] = num;
+				// list->array[i - 1] = num;
 				i++;
 			}
 			else
@@ -45,7 +57,8 @@ int	main(int argc, char **argv)
 				return (0);
 			}
 		}
-		size = stack_size(variable_list.stack_a);
+		variable_list.size = stack_size(variable_list.stack_a);
+		size = variable_list.size;
 		if (is_sorted(variable_list.stack_a))
 		{
 			printf("sorted\n");
@@ -54,56 +67,76 @@ int	main(int argc, char **argv)
 		}
 		if (size <= 3)
 		{
-			print(variable_list.stack_a);
-			random_three_num(&variable_list.stack_a);
-			printf("print_stack(stack_a)\n");
-			print(variable_list.stack_a);
+			// print(variable_list.stack_a);
+			random_three_num(&variable_list, &variable_list.stack_a);
+			// printf("print_stack(stack_a)\n");
+			// print(variable_list.stack_a);
 			return (0);
 		}
 		else if (size < 6)
 		{
-			printf("\nrun random 5========\n");
-			print_dll(variable_list.stack_a);
+			// printf("\nrun random 5========\n");
+			// print_dll(variable_list.stack_a);
 			// rra(&variable_list.stack_a);
 			random_five_num(&variable_list);
 		}
-		else {
-			printf("bigger than 5 size=%d\n",size);
-			insert_arr(&variable_list,size);
-			print_array(variable_list.array,size);
-
+		else
+		{
+			printf("bigger than 5 size=%d\n", size);
+			// vars.array = malloc(size * sizeof(int));
+			insert_arr(&variable_list, &vars, size);
+			insertionSort(vars.array, size);
+			// print_array(vars.array, size);
+			// insertionSort(list->array, size);
+			// if (size <= 10)
+			// vars.n = 5;
+			if (size < 120)
+				vars.n = 8;
+			else
+				vars.n = 18;
+			/* 			if (size <= 10)
+				list->n = 5;
+			else if (size < 150)
+				list->n = 8;
+			else
+				list->n = 18; 
+			list->middle = (size) / 2;
+			list->offset = (size / list->n);
+			list->start_index = list->end_index = 0;
+				*/
+			vars.middle = size / 2;
+			vars.offset = (size / vars.n);
+			vars.start_index = vars.end_index = 0;
+			vars.start = vars.end = 0;
+			// printf("n=%d\n", list->n);
+			chunk = 0;
+			while (variable_list.stack_a != NULL)
+			{
+				// 	printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
+				// variable_list.size,
+				// vars.offset,
+				// vars.start,
+				// vars.end);
+				// cal_start_end(&variable_list, list);
+				cal_start_end(&variable_list, &vars);
+				a2b(&variable_list, &vars);
+				// exit(0);
+				// print_array(vars.array, size);
+				// printf("chunk=%d\n", a2b(&variable_list, &vars));
+			}
+			insert_in_sorted_list(&variable_list);
 		}
-		printf("\nmain.stack_a\n");
-		print(variable_list.stack_a);
-		printf("\nmain.stack_b\n");
-		print(variable_list.stack_b);
-		// pa(variable_list.stack_b,variable_list.stack_a);
-		// pa(variable_list.stack_b,variable_list.stack_a);
-		// print_stack(variable_list.stack_a);
-		// random_five_num(&variable_list);
-		// swap_stack(stack_a);
-		// rrotate_stack(&variable_list.stack_a);
-		// push_top_to_another(&stack_b, &stack_a);
-		// swap_stack(variable_list.stack_a);
-		// print_stack(stack_a);
-		// printf("print_stack(stack_b)\n");
-		// print_stack(stack_b);
-		// push_top_to_another(&stack_a, &stack_b);
-		// push_top_to_another(&stack_b, &stack_a);
-		// printf("(stack_a)\n");
-		// print_stack(variable_list.stack_a);
-		// printf("(stack_b)\n");
-		// print_stack(variable_list.stack_b);
-		// printf("\nlargest=%d\n", find_largest_num(stack_a));
-		// printf("\nsmallest=%d\n", find_smallest_num(stack_a));
 	}
+	// free(list);
+	// atexit(check_leaks);
 }
 
 /* Debugging
 		printf("debugging\n");
 		sa(stack);
 		print(*stack);
-		printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n", (*head)->data,
+		printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
+				(*head)->data,
 				(*head)->prev->data, (*head)->prev->prev->data,
 				(*head)->next->data, (*head)->next->next->data);
 				
@@ -117,4 +150,12 @@ int	main(int argc, char **argv)
 				(*stack)->prev->data, (*stack)->prev->prev->data,
 				(*stack)->next->data);
 
+
+			printf("size = %d\toffset=%d\tstart=%ld\tend=%ld\n",
+					variable_list.size,
+					variable_list.offset,
+					variable_list.start,
+					variable_list.end);
+
+				
 */
