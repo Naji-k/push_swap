@@ -85,8 +85,8 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 	offset = list->offset;
 	// printf("list->array[variable_list->size - 1]=%d\n",
 	// 		list->array[variable_list->size - 1]);
-	if (list->end != list->array[variable_list->size - 1])
-	{
+	// if (list->end != list->array[variable_list->size - 1])
+	// {
 		if (list->end_index == 0)
 		{
 			list->start_index = list->middle - offset;
@@ -97,7 +97,7 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 			list->start_index = list->start_index - offset;
 			list->end_index = list->end_index + offset;
 		}
-	}
+	// }
 	if (list->start_index < 0)
 		list->start_index = 0;
 	if (list->end_index > variable_list->size - 1)

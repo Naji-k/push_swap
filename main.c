@@ -24,16 +24,15 @@ void	free_all(t_dll_stack **list)
 
 	if (*list == NULL)
 		return ;
-		tail = (*list)->prev;
-		while(*list != tail)
-		{
-			temp = *list;
-			(*list) = (*list)->next;
-			free(temp);
-		}
-		free(*list);
-		*list = NULL;
-
+	tail = (*list)->prev;
+	while (*list != tail)
+	{
+		temp = *list;
+		(*list) = (*list)->next;
+		free(temp);
+	}
+	free(*list);
+	*list = NULL;
 }
 int	main(int argc, char **argv)
 {
@@ -77,6 +76,8 @@ int	main(int argc, char **argv)
 		}
 		variable_list.size = stack_size(variable_list.stack_a);
 		size = variable_list.size;
+		insert_arr(&variable_list, &vars, size);
+		insertionSort(vars.array, size);
 		if (is_sorted(variable_list.stack_a))
 		{
 			printf("sorted\n");
@@ -96,20 +97,18 @@ int	main(int argc, char **argv)
 			// printf("\nrun random 5========\n");
 			// print_dll(variable_list.stack_a);
 			// rra(&variable_list.stack_a);
-			random_five_num(&variable_list);
+			random_five_num(&variable_list, &vars);
 		}
 		else
 		{
 			printf("bigger than 5 size=%d\n", size);
 			// vars.array = malloc(size * sizeof(int));
-			insert_arr(&variable_list, &vars, size);
-			insertionSort(vars.array, size);
 			// print_array(vars.array, size);
 			// insertionSort(list->array, size);
-			// if (size <= 10)
-			// vars.n = 5;
-			if (size < 50)
-			vars.n = 8;
+			if (size <= 10)
+				vars.n = 5;
+			else if (size < 50)
+				vars.n = 8;
 			else if (size < 150)
 				vars.n = 11;
 			else
@@ -142,10 +141,10 @@ int	main(int argc, char **argv)
 				size -= a2b(&variable_list, &vars, size);
 				// cal_start_end(&variable_list, &vars);
 				// size -= a2b(&variable_list, &vars, size);
-				// exit(0);
 				// print_array(vars.array, size);
 				// printf("chunk=%d\n", a2b(&variable_list, &vars));
 			}
+			// exit(0);
 			// write(1, "b2a", 3);
 			insert_in_sorted_list(&variable_list);
 		}
@@ -157,7 +156,7 @@ int	main(int argc, char **argv)
 	// list_free(&variable_list.stack_a);
 	free_all(&variable_list.stack_a);
 	free_all(&variable_list.stack_b);
-	atexit(check_leaks);
+	// atexit(check_leaks);
 }
 
 /* Debugging

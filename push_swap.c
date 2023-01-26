@@ -19,6 +19,10 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 	level = 0;
 	while (variable_list->stack_b != NULL)
 	{
+		// make sure highest number is on top of stack b
+		// also look for the next number
+		// push highest - 1, call same function recursively
+		// let the function finish and swap a in the old function
 		if (variable_list->stack_a == NULL)
 			pa(variable_list);
 		if (variable_list->stack_b != NULL
@@ -31,7 +35,7 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 		}
 		else if (variable_list->stack_b != NULL
 				&& variable_list->stack_b->data < variable_list->stack_a->data)
-				//headB < headA
+			//headB < headA
 			pa(variable_list);
 		else
 		{
@@ -41,7 +45,6 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 				ra(&variable_list->stack_a);
 				level++;
 			}
-
 			pa(variable_list);
 			check_top_b(&variable_list->stack_b);
 		}
@@ -50,10 +53,11 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 }
 
 void	check_top_b(t_dll_stack **stack)
-{//put the biggest on top
+{
 	t_dll_stack	*head;
 	t_dll_stack	*next;
 
+	//put the biggest on top
 	if ((*stack) != NULL)
 	{
 		head = (*stack);
@@ -112,16 +116,43 @@ void	random_three_num(t_var_list *variable_list, t_dll_stack **stack)
 		rra(stack);
 }
 
-void	random_five_num(t_var_list *variable_list)
+void	push_smallest_number(t_var_list *variable_list, t_indexing *vars, int i)
 {
-	pb(variable_list);
-	pb(variable_list);
+	t_dll_stack	*temp;
+	int			level;
+	int			size;
+
+	size = stack_size(variable_list->stack_a);
+	level = 0;
+	temp = variable_list->stack_a;
+	while (temp->data != vars->array[i])
+	{
+		level++;
+		temp = temp->next;
+	}
+	if (level > 2)
+	{
+		multi_rra(&variable_list->stack_a, size - level);
+		pb(variable_list);
+	}
+	else if (level <= 2)
+	{
+		multi_ra(&variable_list->stack_a,level - 1);
+		pb(variable_list);
+	}
+}
+
+void	random_five_num(t_var_list *variable_list, t_indexing *vars)
+{
+	push_smallest_number(variable_list, vars, 0);
+	push_smallest_number(variable_list, vars, 1);
+	// exit(0);
+	// pb(variable_list);
+	// pb(variable_list);
 	random_three_num(variable_list, &variable_list->stack_a);
+	pa(variable_list);
+	pa(variable_list);
 	// printf("\n(finish 3 sort)\n");
 	// printf("==================\n");
 	insert_in_sorted_list(variable_list);
-	if (is_sorted(variable_list->stack_a))
-		printf("===sorted===\n");
-	else
-		printf("=NOT_sorted=\n");
 }

@@ -66,7 +66,7 @@ void					ft_swap(t_stack *a, t_stack *b);
 void	random_three_num(t_var_list *variable_list,
 						t_dll_stack **stack);
 void					rra(t_dll_stack **stack);
-void					random_five_num(t_var_list *variable_list);
+void					random_five_num(t_var_list *variable_list, t_indexing *vars);
 //Doubly linked list
 t_dll_stack				*new_circular_doubly(int data);
 t_dll_stack				*add_at_begin(t_dll_stack *tail, int data);
