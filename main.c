@@ -17,13 +17,31 @@ void	check_leaks(void)
 	system("leaks -q a.out");
 }
 
+void	free_all(t_dll_stack **list)
+{
+	t_dll_stack	*temp;
+	t_dll_stack	*tail;
+
+	if (*list == NULL)
+		return ;
+		tail = (*list)->prev;
+		while(*list != tail)
+		{
+			temp = *list;
+			(*list) = (*list)->next;
+			free(temp);
+		}
+		free(*list);
+		*list = NULL;
+
+}
 int	main(int argc, char **argv)
 {
 	t_var_list	variable_list;
 	int			num;
 	int			i;
 	int			size;
-	int			chunk;
+	int			moved;
 	t_indexing	vars;
 
 	// t_indexing	*list;
@@ -90,10 +108,12 @@ int	main(int argc, char **argv)
 			// insertionSort(list->array, size);
 			// if (size <= 10)
 			// vars.n = 5;
-			if (size < 120)
-				vars.n = 8;
+			if (size < 50)
+			vars.n = 8;
+			else if (size < 150)
+				vars.n = 11;
 			else
-				vars.n = 18;
+				vars.n = 33;
 			/* 			if (size <= 10)
 				list->n = 5;
 			else if (size < 150)
@@ -109,7 +129,7 @@ int	main(int argc, char **argv)
 			vars.start_index = vars.end_index = 0;
 			vars.start = vars.end = 0;
 			// printf("n=%d\n", list->n);
-			chunk = 0;
+			moved = 0;
 			while (variable_list.stack_a != NULL)
 			{
 				// 	printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
@@ -119,16 +139,25 @@ int	main(int argc, char **argv)
 				// vars.end);
 				// cal_start_end(&variable_list, list);
 				cal_start_end(&variable_list, &vars);
-				a2b(&variable_list, &vars);
+				size -= a2b(&variable_list, &vars, size);
+				// cal_start_end(&variable_list, &vars);
+				// size -= a2b(&variable_list, &vars, size);
 				// exit(0);
 				// print_array(vars.array, size);
 				// printf("chunk=%d\n", a2b(&variable_list, &vars));
 			}
+			// write(1, "b2a", 3);
 			insert_in_sorted_list(&variable_list);
 		}
 	}
-	// free(list);
-	// atexit(check_leaks);
+	if (is_sorted(variable_list.stack_a))
+		printf("===sorted===\n");
+	else
+		printf("=NOT_sorted=\n");
+	// list_free(&variable_list.stack_a);
+	free_all(&variable_list.stack_a);
+	free_all(&variable_list.stack_b);
+	atexit(check_leaks);
 }
 
 /* Debugging

@@ -119,28 +119,36 @@ bool	in_range(int start, int end, t_dll_stack *curr)
 	return (curr->data >= start && curr->data <= end);
 }
 
-int	a2b(t_var_list *variable_list, t_indexing *list)
+int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 {
 	int	start;
 	int	end;
 	int	mid;
-	int	size;
+	int	moved;
+	int	chunk;
 
+	moved = 0;
 	start = list->start;
 	end = list->end;
 	mid = list->array[list->middle];
-	size = stack_size(variable_list->stack_a);
+	chunk = list->offset * 2;
+	if (size < (list->offset * 2))
+		chunk = size;
+	// size = stack_size(variable_list->stack_a);
 	// printf("size_inside_a2b=%d\n", size);
 	// printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
 	// 		variable_list->size,
 	// 		list->offset,
 	// 		list->start,
 	// 		list->end);
-	while (size != 0 && variable_list->stack_a != NULL)
+	// printf("\tshould_move=%d\t and size=%d\tmoved=%d\n", chunk, size, moved);
+	while (chunk > 0 && variable_list->stack_a != NULL)
 	{
 		while (in_range(start, end, variable_list->stack_a))
 		{
 			size--;
+			chunk--;
+			moved++;
 			pb(variable_list);
 			if (variable_list->stack_b->data < mid)
 				rb(&variable_list->stack_b);
@@ -155,13 +163,15 @@ int	a2b(t_var_list *variable_list, t_indexing *list)
 			size--;
 			rra(&variable_list->stack_a);
 			pb(variable_list);
+			moved++;
+			chunk--;
 			if (variable_list->stack_b->data < mid)
 				rb(&variable_list->stack_b);
 		}
 		ra(&variable_list->stack_a);
-		size--;
+		// size--;
 	}
-	return (size);
+	return (moved);
 }
 /* 
 void	sort_big_numbers(t_var_list *variable_list, t_indexing *list)

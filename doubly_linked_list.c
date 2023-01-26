@@ -17,6 +17,8 @@ t_dll_stack	*new_circular_doubly(int data)
 	t_dll_stack	*new_node;
 
 	new_node = (t_dll_stack *)malloc(sizeof(t_dll_stack));
+	if (!new_node)
+		return (NULL);
 	new_node->data = data;
 	new_node->next = new_node;
 	new_node->prev = new_node;
@@ -369,7 +371,23 @@ bool	is_sorted(t_dll_stack *head)
 	}
 	return (true);
 }
+
 /* 
+void	free_2d(t_dll_stack *stack)
+{
+	int	i = 0;
+
+	while (stack[i])
+	{
+		free(stack[i])
+		i++;
+	}
+}
+
+void	check_leaks(void)
+{
+	system("leaks -q a.out");
+}
 int	main(void)
 {
 	t_dll_stack	*tail;
@@ -377,52 +395,54 @@ int	main(void)
 
 	tail = NULL;
 	tail2 = NULL;
+	atexit(check_leaks);
+	// tail = new_circular_doubly(4);
 	add_last(&tail, 1);
 	add_last(&tail, 3);
-	push_top_to_dll(&tail2,&tail);
-	push_top_to_dll(&tail2,&tail);
 	// add_last(&tail, 2);
-	// add_last(&tail, 4);
 	// add_last(&tail, 5);
-			// printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
-			// 		tail->data,
-			// 	tail->prev->data, tail->prev->prev->data,
-			// 	tail->next->data, tail->next->next->data);
-	print(tail);
-	in_range(0,15,tail);
-	printf(("stack_size= %d\n"),stack_size(tail));
-	// printf("\nhead =====%d\n", tail->data);
-	exit(0);
+	// add_last(&tail, 4);
+	// push_top_to_dll(&tail2,&tail);
+	// push_top_to_dll(&tail2,&tail);
 	// swap_dll(&tail);
+	// printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
+	// 		tail->data,
+	// 	tail->prev->data, tail->prev->prev->data,
+	// 	tail->next->data, tail->next->next->data);
+	// rotate_dll(&tail);
+	// rrotate_dll(&tail);
+	print(tail);
+	// in_range(0,15,tail);
+	// printf(("stack_size= %d\n\n"),stack_size(tail));
+	// printf("\nhead =====%d\n", tail->data);
+	// exit(0);
 	// swap_dll(&tail);
 	// print_dll(tail);
 	// rrotate_dll(&tail);
-	// rrotate_dll(&tail);
-	// rrotate_dll(&tail);
 	// random_three_num(&tail);
 	// printf("\nhead =====%d\n", tail->data);
-	print(tail);
+	// print(tail);
 	// pb(&tail2, &tail);
 	// pb(&tail2, &tail);
 	// del_first(&tail);
-	printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,
-			tail->next->data, tail->prev->data);
-	print(tail);
-	ra(&tail);
-	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
-			tail->next->data, tail->prev->data);
-	print(tail);
+	// printf("\ndel1_head%d==head.next=%d=head.prev=%d\n", tail->data,
+	// 		tail->next->data, tail->prev->data);
+	// print(tail);
+	// ra(&tail);
+	// printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
+	// 		tail->next->data, tail->prev->data);
+	// print(tail);
 	printf("debugging\n");
-	exit(0);
 	// del_first(&tail);
-	ra(&tail);
+	// ra(&tail);
+	// exit(0);
 	// del_first(&tail);
 	// pa(&tail, &tail2);
-	printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
-			tail->next->data, tail->prev->data);
+	// printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
+	// 		tail->next->data, tail->prev->data);
 	// print(tail);
 	// printf("\ndel3_head%d==head.next=%d=head.prev=%d\n",
-			// tail->data,tail->next->data, tail->prev->data);
+	// tail->data,tail->next->data, tail->prev->data);
 	// print(tail);
 	// print(tail2);
 	// print(tail2);
@@ -438,5 +458,6 @@ int	main(void)
 	// printf("\nstack2\n");
 	// print_dll(tail2);
 	// printf("index of max=%d",find_largest_num(tail));
+	free_2d(tail);
 }
  */

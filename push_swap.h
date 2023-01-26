@@ -77,6 +77,7 @@ t_dll_stack				*insert_after(t_dll_stack *tail, int data, int pos);
 t_dll_stack				*del_inter(t_dll_stack *tail, int pos);
 //actions
 void					sa(t_var_list *variable_list);
+void					sb(t_var_list *variable_list);
 void					ra(t_dll_stack **stack);
 void					pa(t_var_list *variable_list);
 void					pb(t_var_list *variable_list);
@@ -89,6 +90,7 @@ int						multi_rra(t_dll_stack **stack, int times);
 void					multi_ra(t_dll_stack **stack, int times);
 void					rr(t_dll_stack **stack_a, t_dll_stack **stack_b);
 void					rrr(t_dll_stack **stack_a, t_dll_stack **stack_b);
+void					check_top_b(t_dll_stack **stack);
 
 void					insertBegin(t_dll_stack **tail, int value);
 void					swap_dll(t_dll_stack **head);
@@ -99,13 +101,14 @@ bool					is_sorted(t_dll_stack *head);
 void					print(t_dll_stack *head);
 int						top_level(t_dll_stack **stack, int key);
 //arr
-void					insert_arr(t_var_list *variable_list, t_indexing *list, int size);
+void					insert_arr(t_var_list *variable_list, t_indexing *list,
+							int size);
 void					print_array(int *arr, int size);
 void					insertionSort(int array[], int size);
 void	cal_start_end(t_var_list *variable_list,
 					t_indexing *list);
 bool					in_range(int start, int end, t_dll_stack *curr);
-int						a2b(t_var_list *variable_list, t_indexing *list);
+int						a2b(t_var_list *variable_list, t_indexing *list, int size);
 void	sort_big_numbers(t_var_list *variable_list,
 						t_indexing *list);
 void					insert_in_sorted_list(t_var_list *variable_list);

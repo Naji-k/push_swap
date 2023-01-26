@@ -26,11 +26,12 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 		{ //if headB > tailA
 			// pa(&variable_list->stack_a, &variable_list->stack_b);
 			pa(variable_list);
+			check_top_b(&variable_list->stack_b);
 			ra(&variable_list->stack_a);
 		}
 		else if (variable_list->stack_b != NULL
 				&& variable_list->stack_b->data < variable_list->stack_a->data)
-			// pa(&variable_list->stack_a, &variable_list->stack_b);
+				//headB < headA
 			pa(variable_list);
 		else
 		{
@@ -40,8 +41,27 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 				ra(&variable_list->stack_a);
 				level++;
 			}
+
 			pa(variable_list);
-			level = multi_rra(&variable_list->stack_a, level);
+			check_top_b(&variable_list->stack_b);
+		}
+		level = multi_rra(&variable_list->stack_a, level);
+	}
+}
+
+void	check_top_b(t_dll_stack **stack)
+{//put the biggest on top
+	t_dll_stack	*head;
+	t_dll_stack	*next;
+
+	if ((*stack) != NULL)
+	{
+		head = (*stack);
+		next = (*stack)->next;
+		if (next->data > head->data)
+		{
+			swap_dll(stack);
+			ft_printf("sb\n");
 		}
 	}
 }

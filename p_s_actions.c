@@ -17,6 +17,11 @@ void	sa(t_var_list *variable_list)
 	swap_dll(&variable_list->stack_a);
 	ft_printf("sa\n");
 }
+void	sb(t_var_list *variable_list)
+{
+	swap_dll(&variable_list->stack_b);
+	ft_printf("sb\n");
+}
 
 void	pa(t_var_list *variable_list)
 {
