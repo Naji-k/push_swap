@@ -10,27 +10,30 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = push_swap.a
+NAME = push_swap
 
-AR = ar
-CC = cc
 
-FLAGS = -Wall -Wextra -Werror
+CC = gcc
 
+# FLAGS = -Wall -Wextra -Werror
+
+LIB = ../printf/libftprintf.a
 Make = make
 
 SRC = doubly_linked_list.c \
 	main.c \
 	p_s_actions.c \
-	
+	push_swap.c \
+	sort_big_num.c \
+	parsing_inputs.c \
+
 OBJS = ${SRC:.c=.o}
 
 all: ${NAME}
 
 ${NAME}:	${OBJS}
 	cd ../printf && $(MAKE)
-	cp ../printf/libftprintf.a $(NAME)
-	$(AR) -crs ${NAME} ${OBJS}
+	$(CC) -o ${NAME} ${OBJS} $(LIB)
 
 %.o : %.c
 	$(CC) $(FLAGS) -c $< -o $@
@@ -40,7 +43,7 @@ clean:
 	cd ../printf && $(MAKE) clean
 
 fclean: clean
-	rm f $(NAME) a.out
+	rm f $(NAME)
 	cd ../printf && $(MAKE) fclean
 
 re: fclean all

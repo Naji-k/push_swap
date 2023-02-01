@@ -12,6 +12,208 @@
 
 #include "push_swap.h"
 
+int	search_for_highest(t_dll_stack *stack, t_indexing *vars, int size)
+{
+	int			level;
+	int			offset;
+	t_dll_stack	*tail;
+
+	tail = stack->prev;
+	offset = vars->offset;
+	level = 0;
+	// printf("h=%d\n", vars->array[size - 1]);
+	// while (stack->data != vars->array[size - 1] && stack != tail)
+	while (stack->data != vars->array[size] && stack != tail)
+	{
+		stack = stack->next;
+		level++;
+		if (stack->data == vars->array[size])
+			return (level);
+		// else if (stack->data == vars->array[size - 2])
+		// 	return (level);
+	}
+	// while (temp2->data != vars->array[size - 1] && level < offset)
+	// {
+	// 	temp2 = temp2->next;
+	// 	level++;
+	// 	if (temp2->data == vars->array[size - 1])
+	// 		return (-level);
+	// }
+	return (0);
+}
+
+int	find_highest_1(t_dll_stack *stack, t_indexing *vars, int size)
+{
+	int			level;
+	int			offset;
+	t_dll_stack	*tail;
+	t_dll_stack	*head;
+
+	tail = stack->prev;
+	head = stack;
+	offset = vars->offset;
+	level = 0;
+	// while (head != tail)
+	// {
+	if (head->data == vars->array[size - 1])
+		return (1);
+	if (tail->data == vars->array[size - 1])
+	{
+		// level *= -1;
+		return (-1);
+	}
+	head = head->next;
+	tail = tail->prev;
+	level++;
+	// }
+	return (find_highest_1(stack, vars, size - 1));
+}
+
+void	b2A(t_var_list *variable_list, t_indexing *vars)
+{
+	int	level;
+	int	size;
+
+	size = stack_size(variable_list->stack_b);
+	level = 0;
+	while (variable_list->stack_b != NULL)
+	{
+		level = find_highest_1(variable_list->stack_b, vars, size);
+		// printf("%d\n", level);
+		if (level == 0)
+		{
+			if (variable_list->stack_b->data == vars->array[size - 1])
+			{
+				pa(variable_list);
+				size--;
+			}
+			else
+			{
+				printf("temp->data =%d  vars->array[size])=%d\n",
+						variable_list->stack_b->data,
+						vars->array[size - 1]);
+				exit(0);
+			}
+		}
+		else if (level > 0)
+		{
+			// printf("level=%d", level);
+			// multi_rb(&variable_list->stack_b, level);
+			while (variable_list->stack_b->data != vars->array[size - 1])
+				rb(&variable_list->stack_b);
+			if (variable_list->stack_b->data == vars->array[size - 1])
+			{
+				pa(variable_list);
+				size--;
+			}
+			else
+			{
+				printf("temp->data =%d  vars->array[size])=%d\n",
+						variable_list->stack_b->data,
+						vars->array[size - 1]);
+				exit(0);
+			}
+		}
+		else if (level < 0)
+		{
+			// printf("--level=%d\tsize=%d", level, size);
+			// multi_rrb(&variable_list->stack_b, level);
+			while (variable_list->stack_b->data != vars->array[size - 1])
+				rrb(&variable_list->stack_b);
+			if (variable_list->stack_b->data == vars->array[size - 1])
+			{
+				pa(variable_list);
+				size--;
+			}
+			else
+			{
+				printf("temp->data =%d  vars->array[size])=%d\n",
+						variable_list->stack_b->data,
+						vars->array[size - 1]);
+				exit(0);
+			}
+		}
+		// printf("topB=%d\n", variable_list->stack_b->data);
+		// exit(0);
+	}
+}
+
+void	b2a(t_var_list *variable_list, t_indexing *vars)
+{
+	int	level;
+	int	size;
+	int	highest;
+
+	size = stack_size(variable_list->stack_b);
+	level = 0;
+	// printf("%d", search_for_highest(variable_list->stack_b, vars->array,
+	// size));
+	while (variable_list->stack_b != NULL)
+	{
+		highest = size - 1;
+		level = search_for_highest(variable_list->stack_b, vars, highest);
+		// printf("level_OUT=%d\n", level);
+		// printf("======here=====\n");
+		if (level == 0)
+		{
+			if (variable_list->stack_b->data == vars->array[size - 1])
+			{
+				pa(variable_list);
+				check_top_a(&variable_list->stack_a);
+				size--;
+			}
+			// else
+			// {
+			// 	pa(variable_list);
+			// 	size--;
+			// 	// printf("temp->data =%d  vars->array[size])=%d\n",
+			// 	// 		variable_list->stack_b->data,
+			// 	// 		vars->array[size - 1]);
+			// }
+		}
+		else if (level <= (size / 2))
+		{
+			// printf("level=%d", level);
+			multi_rb(&variable_list->stack_b, level);
+			if (variable_list->stack_b->data == vars->array[size - 1])
+			{
+				pa(variable_list);
+				check_top_a(&variable_list->stack_a);
+				size--;
+			}
+			// else
+			// {
+			// 	pa(variable_list);
+			// 	size--;
+			// 	// printf("temp->data =%d  vars->array[size])=%d\n",
+			// 	// 		variable_list->stack_b->data,
+			// 	// 		vars->array[size - 1]);
+			// 	// exit(0);
+			// }
+		}
+		else if (level > (size / 2))
+		{
+			// printf("level=%d\tsize=%d", level, size);
+			multi_rrb(&variable_list->stack_b, size - level);
+			pa(variable_list);
+			check_top_a(&variable_list->stack_a);
+			size--;
+		}
+		// else
+		// {
+		// 	pa(variable_list);
+		// 	size--;
+		// 	// printf("temp->data =%d  vars->array[size])=%d\n",
+		// 	// 		variable_list->stack_b->data,
+		// 	// 		vars->array[size - 1]);
+		// 	// exit(0);
+		// }
+	}
+	// printf("topB=%d\n", variable_list->stack_b->data);
+	// exit(0);
+	// }
+}
+
 void	insert_in_sorted_list(t_var_list *variable_list)
 {
 	int	level;
@@ -30,7 +232,7 @@ void	insert_in_sorted_list(t_var_list *variable_list)
 		{ //if headB > tailA
 			// pa(&variable_list->stack_a, &variable_list->stack_b);
 			pa(variable_list);
-			check_top_b(&variable_list->stack_b);
+			// check_top_b(&variable_list->stack_b);
 			ra(&variable_list->stack_a);
 		}
 		else if (variable_list->stack_b != NULL
@@ -69,24 +271,22 @@ void	check_top_b(t_dll_stack **stack)
 		}
 	}
 }
-
-int	top_level(t_dll_stack **stack, int key)
+void	check_top_a(t_dll_stack **stack)
 {
-	int			i;
-	t_dll_stack	*tail;
-	t_dll_stack	*temp;
+	t_dll_stack	*head;
+	t_dll_stack	*next;
 
-	i = 0;
-	tail = (*stack)->prev;
-	temp = (*stack);
-	while ((temp != tail))
+	//put the smallest on top
+	if ((*stack) != NULL)
 	{
-		if (temp->data > key)
-			return (i);
-		i++;
-		temp = temp->next;
+		head = (*stack);
+		next = (*stack)->next;
+		if (next->data < head->data)
+		{
+			swap_dll(stack);
+			ft_printf("sa\n");
+		}
 	}
-	return (i);
 }
 
 void	random_three_num(t_var_list *variable_list, t_dll_stack **stack)
@@ -115,7 +315,7 @@ void	random_three_num(t_var_list *variable_list, t_dll_stack **stack)
 	else if (mid > top && top > bottom && mid > bottom)
 		rra(stack);
 }
-
+// HERE CHECK FOR 5 RANDOM RRA AND RA 
 void	push_smallest_number(t_var_list *variable_list, t_indexing *vars, int i)
 {
 	t_dll_stack	*temp;
@@ -137,7 +337,7 @@ void	push_smallest_number(t_var_list *variable_list, t_indexing *vars, int i)
 	}
 	else if (level <= 2)
 	{
-		multi_ra(&variable_list->stack_a,level - 1);
+		multi_ra(&variable_list->stack_a, level - 1);
 		pb(variable_list);
 	}
 }
@@ -154,5 +354,5 @@ void	random_five_num(t_var_list *variable_list, t_indexing *vars)
 	pa(variable_list);
 	// printf("\n(finish 3 sort)\n");
 	// printf("==================\n");
-	insert_in_sorted_list(variable_list);
+	// insert_in_sorted_list(variable_list);
 }

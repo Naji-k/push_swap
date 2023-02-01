@@ -87,16 +87,16 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 	// 		list->array[variable_list->size - 1]);
 	// if (list->end != list->array[variable_list->size - 1])
 	// {
-		if (list->end_index == 0)
-		{
-			list->start_index = list->middle - offset;
-			list->end_index = list->middle + offset;
-		}
-		else
-		{
-			list->start_index = list->start_index - offset;
-			list->end_index = list->end_index + offset;
-		}
+	if (list->end_index == 0)
+	{
+		list->start_index = list->middle - offset;
+		list->end_index = list->middle + offset;
+	}
+	else
+	{
+		list->start_index = list->start_index - offset;
+		list->end_index = list->end_index + offset;
+	}
 	// }
 	if (list->start_index < 0)
 		list->start_index = 0;
@@ -119,6 +119,69 @@ bool	in_range(int start, int end, t_dll_stack *curr)
 	return (curr->data >= start && curr->data <= end);
 }
 
+int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
+{
+	int			level;
+	t_dll_stack	*tail;
+
+	level = 0;
+	tail = stack->prev;
+	while (!in_range(vars->start, vars->end, stack) && stack != tail)
+	{
+		stack = stack->next;
+		level++;
+		if (in_range(vars->start, vars->end, stack))
+			return (level);
+	}
+	return (level);
+}
+int	A2B(t_var_list *variable_list, t_indexing *list, int size)
+{
+	int	start;
+	int	end;
+	int	mid;
+	int	moved;
+	int	chunk;
+	int	level;
+
+	moved = 0;
+	start = list->start;
+	end = list->end;
+	mid = list->array[list->middle];
+	if (size < (list->offset * 2))
+		chunk = size;
+	while (chunk > 0 && variable_list->stack_a != NULL)
+	{
+		level = number_in_chunk_level(variable_list->stack_a, list);
+		if (level == 0)
+		{
+			pb(variable_list);
+			size--;
+			chunk--;
+			moved++;
+		}
+		else if (level <= (size / 2))
+		{
+			multi_ra(&variable_list->stack_a, level);
+			pb(variable_list);
+			size--;
+			chunk--;
+			moved++;
+			if (variable_list->stack_b->data < mid)
+				rb(&variable_list->stack_b);
+		}
+		else if (level > (size / 2))
+		{
+			multi_rra(&variable_list->stack_a, level);
+			if (variable_list->stack_b->data < mid)
+				rb(&variable_list->stack_b);
+			size--;
+			chunk--;
+			moved++;
+		}
+	}
+	return(moved);
+}
 int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 {
 	int	start;

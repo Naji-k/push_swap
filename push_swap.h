@@ -17,6 +17,7 @@
 # include <limits.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include <stdlib.h>
 
 typedef struct stack
 {
@@ -47,17 +48,12 @@ typedef struct s_indexing
 	int					middle;
 	int					offset;
 	int					n;
-	int					array[500];
+	int					array[1000];
 }						t_indexing;
 
-t_stack					*ft_new(int content, int top);
-void					ft_stack_add_front(t_stack **stack, t_stack *head);
-void					print_stack(t_stack *s);
-int						ft_stack_size(t_stack *lst);
 void					rotate_stack(t_stack **stack);
 void					rrotate_stack(t_stack **stack);
 int						check_doubles(t_dll_stack *stack, int num);
-t_stack					*ft_lststack(t_stack *lst);
 void					push_top_to_another(t_stack **dst, t_stack **src);
 void					swap_stack(t_stack *stack);
 void					pop(t_stack **stack);
@@ -66,7 +62,8 @@ void					ft_swap(t_stack *a, t_stack *b);
 void	random_three_num(t_var_list *variable_list,
 						t_dll_stack **stack);
 void					rra(t_dll_stack **stack);
-void					random_five_num(t_var_list *variable_list, t_indexing *vars);
+void	random_five_num(t_var_list *variable_list,
+						t_indexing *vars);
 //Doubly linked list
 t_dll_stack				*new_circular_doubly(int data);
 t_dll_stack				*add_at_begin(t_dll_stack *tail, int data);
@@ -79,15 +76,19 @@ t_dll_stack				*del_inter(t_dll_stack *tail, int pos);
 void					sa(t_var_list *variable_list);
 void					sb(t_var_list *variable_list);
 void					ra(t_dll_stack **stack);
+void					rra(t_dll_stack **stack);
 void					pa(t_var_list *variable_list);
 void					pb(t_var_list *variable_list);
 void					rb(t_dll_stack **stack);
+void					rrb(t_dll_stack **stack);
 void					rotate_dll(t_dll_stack **head);
 void					rrotate_dll(t_dll_stack **head);
 void					push_top_to_dll(t_dll_stack **dst, t_dll_stack **src);
 void					print_dll(t_dll_stack *head);
 int						multi_rra(t_dll_stack **stack, int times);
 void					multi_ra(t_dll_stack **stack, int times);
+int						multi_rrb(t_dll_stack **stack, int times);
+int						multi_rb(t_dll_stack **stack, int times);
 void					rr(t_dll_stack **stack_a, t_dll_stack **stack_b);
 void					rrr(t_dll_stack **stack_a, t_dll_stack **stack_b);
 void					check_top_b(t_dll_stack **stack);
@@ -99,7 +100,7 @@ int						find_largest_num(t_dll_stack *tail);
 int						find_smallest_num(t_dll_stack *tail);
 bool					is_sorted(t_dll_stack *head);
 void					print(t_dll_stack *head);
-int						top_level(t_dll_stack **stack, int key);
+
 //arr
 void					insert_arr(t_var_list *variable_list, t_indexing *list,
 							int size);
@@ -108,9 +109,23 @@ void					insertionSort(int array[], int size);
 void	cal_start_end(t_var_list *variable_list,
 					t_indexing *list);
 bool					in_range(int start, int end, t_dll_stack *curr);
-int						a2b(t_var_list *variable_list, t_indexing *list, int size);
+int						a2b(t_var_list *variable_list, t_indexing *list,
+							int size);
 void	sort_big_numbers(t_var_list *variable_list,
 						t_indexing *list);
 void					insert_in_sorted_list(t_var_list *variable_list);
+int	search_for_highest(t_dll_stack *stack,
+						t_indexing *vars,
+						int size);
+void	b2a(t_var_list *variable_list,
+			t_indexing *vars);
+void					b2A(t_var_list *var_list, t_indexing *vars);
+int						find_highest_1(t_dll_stack *stack, t_indexing *vars,
+							int size);
+void					check_top_a(t_dll_stack **stack);
+void					write_error(char *error_str);
+int						ft_atoi_overflow(char *str);
+int						A2B(t_var_list *variable_list, t_indexing *list,
+							int size);
 
 #endif

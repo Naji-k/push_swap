@@ -50,7 +50,7 @@ void	ra(t_dll_stack **stack)
 
 void	multi_ra(t_dll_stack **stack, int times)
 {
-	while (times >= 0)
+	while (times > 0)
 	{
 		ra(stack);
 		times--;
@@ -62,6 +62,25 @@ int	multi_rra(t_dll_stack **stack, int times)
 	while (times > 0)
 	{
 		rra(stack);
+		times--;
+	}
+	return (times);
+}
+int	multi_rb(t_dll_stack **stack, int times)
+{
+	while (times > 0)
+	{
+		rb(stack);
+		times--;
+	}
+	return (times);
+}
+
+int	multi_rrb(t_dll_stack **stack, int times)
+{
+	while (times > 0)
+	{
+		rrb(stack);
 		times--;
 	}
 	return (times);
