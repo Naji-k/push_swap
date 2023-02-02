@@ -36,7 +36,6 @@ void	pb(t_var_list *variable_list)
 {
 	if (variable_list->stack_a != NULL)
 	{
-		// ft_printf("pb=%d\n", variable_list->stack_a->data);
 		ft_printf("pb\n");
 		push_top_to_dll(&variable_list->stack_b, &variable_list->stack_a);
 	}

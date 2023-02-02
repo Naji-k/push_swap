@@ -14,29 +14,20 @@
 
 void	insert_arr(t_var_list *variable_list, t_indexing *list, int size)
 {
-	t_dll_stack	*tail;
+	// t_dll_stack	*tail;
 	t_dll_stack	*current;
 	int			i;
 
-	// int			*arr = list->array;
-	// if (!list->array)
-	// {
-	// 	printf("malloc fails\n\n");
-	// 	return ;
-	// }
-	tail = variable_list->stack_a->prev;
+	// tail = variable_list->stack_a->prev;
 	current = variable_list->stack_a;
 	i = 0;
 	while (i < size)
 	{
-		// arr[i++] = current->data;
 		list->array[i] = current->data;
 		current = current->next;
 		i++;
 	}
-	// arr[i] = current->data;
 	list->array[i] = current->data;
-	// list->array = arr;
 }
 
 void	print_array(int *arr, int size)
@@ -77,16 +68,7 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 {
 	int	offset;
 
-	// printf("B_middle = %d\tB_start_index=%d\tB_end_index=%d\toffset=%d\n",
-	// 		list->middle,
-	// 		list->start_index,
-	// 		list->end_index,
-	// 		list->offset);
 	offset = list->offset;
-	// printf("list->array[variable_list->size - 1]=%d\n",
-	// 		list->array[variable_list->size - 1]);
-	// if (list->end != list->array[variable_list->size - 1])
-	// {
 	if (list->end_index == 0)
 	{
 		list->start_index = list->middle - offset;
@@ -97,15 +79,12 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 		list->start_index = list->start_index - offset;
 		list->end_index = list->end_index + offset;
 	}
-	// }
-	if (list->start_index < 0)
+	if (list->start_index < 4)
 		list->start_index = 0;
-	if (list->end_index > variable_list->size - 1)
-		list->end_index = variable_list->size - 1;
+	if (list->end_index > variable_list->size - 4)
+		list->end_index = variable_list->size - 4;
 	list->start = list->array[list->start_index];
 	list->end = list->array[list->end_index];
-	// printf("middle = %d\tstart_index=%d\tend_index=%d\n", list->middle,
-	// 		list->start_index, list->end_index);
 }
 
 bool	in_range(int start, int end, t_dll_stack *curr)
@@ -126,7 +105,7 @@ int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
 
 	level = 0;
 	tail = stack->prev;
-	while (!in_range(vars->start, vars->end, stack) && stack != tail)
+	while (stack != tail)
 	{
 		stack = stack->next;
 		level++;
@@ -135,53 +114,7 @@ int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
 	}
 	return (level);
 }
-int	A2B(t_var_list *variable_list, t_indexing *list, int size)
-{
-	int	start;
-	int	end;
-	int	mid;
-	int	moved;
-	int	chunk;
-	int	level;
 
-	moved = 0;
-	start = list->start;
-	end = list->end;
-	mid = list->array[list->middle];
-	if (size < (list->offset * 2))
-		chunk = size;
-	while (chunk > 0 && variable_list->stack_a != NULL)
-	{
-		level = number_in_chunk_level(variable_list->stack_a, list);
-		if (level == 0)
-		{
-			pb(variable_list);
-			size--;
-			chunk--;
-			moved++;
-		}
-		else if (level <= (size / 2))
-		{
-			multi_ra(&variable_list->stack_a, level);
-			pb(variable_list);
-			size--;
-			chunk--;
-			moved++;
-			if (variable_list->stack_b->data < mid)
-				rb(&variable_list->stack_b);
-		}
-		else if (level > (size / 2))
-		{
-			multi_rra(&variable_list->stack_a, level);
-			if (variable_list->stack_b->data < mid)
-				rb(&variable_list->stack_b);
-			size--;
-			chunk--;
-			moved++;
-		}
-	}
-	return(moved);
-}
 int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 {
 	int	start;
@@ -205,7 +138,8 @@ int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 	// 		list->start,
 	// 		list->end);
 	// printf("\tshould_move=%d\t and size=%d\tmoved=%d\n", chunk, size, moved);
-	while (chunk > 0 && variable_list->stack_a != NULL)
+	// while (chunk > 0 && variable_list->stack_a != NULL)
+	while (chunk > 0 && size > 3)
 	{
 		while (in_range(start, end, variable_list->stack_a))
 		{
@@ -218,21 +152,9 @@ int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 		}
 		if (variable_list->stack_a == NULL)
 		{
-			// printf("==========\n");
 			return (0);
 		}
-		while (in_range(start, end, variable_list->stack_a->prev))
-		{
-			size--;
-			rra(&variable_list->stack_a);
-			pb(variable_list);
-			moved++;
-			chunk--;
-			if (variable_list->stack_b->data < mid)
-				rb(&variable_list->stack_b);
-		}
 		ra(&variable_list->stack_a);
-		// size--;
 	}
 	return (moved);
 }

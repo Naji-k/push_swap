@@ -165,13 +165,13 @@ void	add_last(t_dll_stack **head, int data)
 
 void	rotate_dll(t_dll_stack **head)
 {
-	t_dll_stack	*temp;
+	// t_dll_stack	*temp;
 	t_dll_stack	*tail;
 
 	if (*head == NULL)
 		return ;
 	tail = (*head)->prev;
-	temp = (*head)->next;
+	// temp = (*head)->next;
 	tail = (*head);
 	(*head) = (*head)->next;
 	(*head)->prev = tail;
@@ -234,16 +234,12 @@ void	swap_dll(t_dll_stack **head)
 
 void	push_top_to_dll(t_dll_stack **dst, t_dll_stack **src)
 {
-	// t_dll_stack	*head_src;
 	if (*src != NULL)
 	{
-		// head_src = (*src)->next;
-		// *dst = add_at_begin(*dst,(*src)->data);
 		insertBegin(dst, (*src)->data);
 		del_first(src);
 	}
 	return ;
-	// printf("p_head=%d\t_tail=%d\n", (*dst)->data, (*dst)->prev->data);
 }
 
 t_dll_stack	*del_last(t_dll_stack *tail)
@@ -373,16 +369,6 @@ bool	is_sorted(t_dll_stack *head)
 }
 
 /* 
-void	free_2d(t_dll_stack *stack)
-{
-	int	i = 0;
-
-	while (stack[i])
-	{
-		free(stack[i])
-		i++;
-	}
-}
 
 void	check_leaks(void)
 {

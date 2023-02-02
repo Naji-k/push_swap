@@ -65,13 +65,8 @@ int	main(int argc, char **argv)
 	int			size;
 	t_indexing	vars;
 
-	// int			moved;
-	// t_indexing	*list;
-	// int			*arr;
 	variable_list.stack_a = NULL;
-	//from home get segfault because this line was not exist~
 	variable_list.stack_b = NULL;
-	//from home get segfault because this line was not exist~
 	if (argc > 1)
 	{
 		i = 1;
@@ -100,8 +95,7 @@ int	main(int argc, char **argv)
 		insertionSort(vars.array, size);
 		if (is_sorted(variable_list.stack_a))
 		{
-			printf("sorted\n");
-			print_dll(variable_list.stack_a);
+			return (0);
 		}
 		else if (size <= 3)
 		{
@@ -113,49 +107,29 @@ int	main(int argc, char **argv)
 		}
 		else
 		{
-			// printf("bigger than 5 size=%d\n", size);
-			// vars.array = malloc(size * sizeof(int));
-			// print_array(vars.array, size);
-			// insertionSort(list->array, size);
 			if (size <= 10)
 				vars.n = 5;
 			else if (size < 150)
 				vars.n = 8;
-			// else if (size < 150)
-			// 	vars.n = 11;
 			else
 				vars.n = 18;
 			vars.middle = size / 2;
 			vars.offset = (size / vars.n);
 			vars.start_index = vars.end_index = 0;
 			vars.start = vars.end = 0;
-			// moved = 0;
-			while (variable_list.stack_a != NULL)
+			while (size > 3)
 			{
-				// 	printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
-				// variable_list.size,
-				// vars.offset,
-				// vars.start,
-				// vars.end);
-				// cal_start_end(&variable_list, list);
 				cal_start_end(&variable_list, &vars);
 				size -= a2b(&variable_list, &vars, size);
-				// size -= A2B(&variable_list, &vars, size);
-				// cal_start_end(&variable_list, &vars);
-				// size -= a2b(&variable_list, &vars, size);
-				// print_array(vars.array, size);
-				// printf("chunk=%d\n", a2b(&variable_list, &vars));
 			}
-			// exit(0);
-			// write(1, "b2a\n", 4);
-			// b2A(&variable_list, &vars);
+			random_three_num(&variable_list, &variable_list.stack_a);
 			b2a(&variable_list, &vars);
 		}
 	}
-	// if (is_sorted(variable_list.stack_a))
-	// 	printf("===sorted===\n");
-	// else
-	// 	printf("=NOT_sorted=\n");
+	/* 	if (is_sorted(variable_list.stack_a))
+		printf("===sorted===\n");
+	else
+		printf("=NOT_sorted=\n"); */
 	free_all(&variable_list.stack_a);
 	free_all(&variable_list.stack_b);
 	// atexit(check_leaks);

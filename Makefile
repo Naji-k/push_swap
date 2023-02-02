@@ -15,7 +15,7 @@ NAME = push_swap
 
 CC = gcc
 
-# FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 LIB = ../printf/libftprintf.a
 Make = make
@@ -43,7 +43,7 @@ clean:
 	cd ../printf && $(MAKE) clean
 
 fclean: clean
-	rm f $(NAME)
+	rm -f $(NAME)
 	cd ../printf && $(MAKE) fclean
 
 re: fclean all
