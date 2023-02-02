@@ -25,7 +25,7 @@ t_dll_stack	*new_circular_doubly(int data)
 	return (new_node);
 }
 
-void	insertBegin(t_dll_stack **head, int value)
+void	cdll_insert_at_fist(t_dll_stack **head, int value)
 {
 	t_dll_stack	*new_node;
 	t_dll_stack	*tail;
@@ -37,14 +37,10 @@ void	insertBegin(t_dll_stack **head, int value)
 		return ;
 	}
 	tail = (*head)->prev;
-	// setting up previous and next of new node
 	new_node->prev = tail;
 	new_node->next = (*head);
 	(*head)->prev = new_node;
 	tail->next = new_node;
-	// Update next and previous pointers of start
-	// and last.
-	// Update start pointer
 	(*head) = new_node;
 	return ;
 }
@@ -52,33 +48,28 @@ void	insertBegin(t_dll_stack **head, int value)
 void	del_first(t_dll_stack **head)
 {
 	t_dll_stack	*tail;
-	t_dll_stack	*temp;
 
 	tail = (*head)->prev;
-	temp = (*head)->next;
 	if (*head == NULL)
 		return ;
-	else if (*head == temp) //only 1 node
+	else if (*head == (*head)->next)
 	{
 		free(*head);
 		*head = NULL;
-		return ;
 	}
-	else if (temp == tail) //only 2 nodes
+	else if ((*head)->next == tail)
 	{
-		temp->next = temp;
-		temp->prev = temp;
+		(*head)->next->next = (*head)->next;
+		(*head)->next->prev = (*head)->next;
 		free(*head);
-		(*head) = temp;
-		return ;
+		(*head) = (*head)->next;
 	}
 	else
 	{
-		temp->prev = tail;
-		tail->next = temp;
+		(*head)->next->prev = tail;
+		tail->next = (*head)->next;
 		free(*head);
-		*head = temp;
-		return ;
+		*head = (*head)->next;
 	}
 }
 
@@ -191,13 +182,13 @@ void	push_top_to_dll(t_dll_stack **dst, t_dll_stack **src)
 {
 	if (*src != NULL)
 	{
-		insertBegin(dst, (*src)->data);
+		cdll_insert_at_fist(dst, (*src)->data);
 		del_first(src);
 	}
 	return ;
 }
 
-bool	is_sorted(t_dll_stack *head)
+bool	is_cdll_sorted(t_dll_stack *head)
 {
 	t_dll_stack	*temp;
 
@@ -280,8 +271,6 @@ int	find_smallest_num(t_dll_stack *tail)
 	printf("Min=%d\n", min);
 	return (index);
 } */
-
-
 /* 
 int	main(void)
 {

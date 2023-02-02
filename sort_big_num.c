@@ -17,8 +17,6 @@ void	insert_arr(t_var_list *variable_list, t_indexing *list, int size)
 	t_dll_stack	*current;
 	int			i;
 
-	// t_dll_stack	*tail;
-	// tail = variable_list->stack_a->prev;
 	current = variable_list->stack_a;
 	i = 0;
 	while (i < size)
@@ -40,7 +38,7 @@ void	print_array(int *arr, int size)
 		printf("%d ", arr[i++]);
 }
 
-void	insertionSort(int array[], int size)
+void	array_insertion_sort(int array[], int size)
 {
 	int	i;
 	int	key;
@@ -51,10 +49,7 @@ void	insertionSort(int array[], int size)
 	{
 		key = array[i];
 		j = i - 1;
-		// Compare key with each element on the left of it until an element smaller than
-		// it is found.
-		// For descending order, change key<array[j] to key>array[j].
-		while (j >= 0 && array[j] > key) //key=array[i]=array[j+1]
+		while (j >= 0 && array[j] > key)
 		{
 			array[j + 1] = array[j];
 			j = j - 1;
@@ -91,8 +86,6 @@ bool	in_range(int start, int end, t_dll_stack *curr)
 {
 	if (curr == NULL)
 	{
-		// printf("----------------\n");
-		// exit(0);
 		return (0);
 	}
 	return (curr->data >= start && curr->data <= end);
@@ -117,45 +110,26 @@ int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
 
 int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 {
-	int	start;
-	int	end;
 	int	mid;
 	int	moved;
 	int	chunk;
 
 	moved = 0;
-	start = list->start;
-	end = list->end;
 	mid = list->array[list->middle];
 	chunk = list->offset * 2;
 	if (size < (list->offset * 2))
 		chunk = size;
-	// size = stack_size(variable_list->stack_a);
-	// printf("size_inside_a2b=%d\n", size);
-	// printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
-	// 		variable_list->size,
-	// 		list->offset,
-	// 		list->start,
-	// 		list->end);
-	// printf("\tshould_move=%d\t and size=%d\tmoved=%d\n", chunk, size, moved);
-	// while (chunk > 0 && variable_list->stack_a != NULL)
 	while (chunk > 0 && size > 3)
 	{
-		while (in_range(start, end, variable_list->stack_a))
+		while (in_range(list->start, list->end, variable_list->stack_a))
 		{
 			size--;
 			chunk--;
 			moved++;
 			pb(variable_list);
 			if (variable_list->stack_b->data < mid)
-				// rb(&variable_list->stack_b);
 				rb(variable_list);
 		}
-		if (variable_list->stack_a == NULL)
-		{
-			return (0);
-		}
-		// ra(&variable_list->stack_a);
 		ra(variable_list);
 	}
 	return (moved);

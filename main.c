@@ -39,12 +39,13 @@ void	print_lst(t_list **lst)
 {
 	t_list	*curr;
 
-	while (*lst != NULL)
+	while ((*lst) != NULL)
 	{
 		curr = (*lst);
-		if (((strcmp(curr->content, "ra\n") == 0 && strcmp(curr->next->content,
-					"rb\n") == 0)) || (strcmp(curr->content, "rb\n") == 0
-			&& strcmp(curr->next->content, "ra\n") == 0))
+			if (curr->next != NULL && (((strcmp(curr->content, "ra\n") == 0
+						&& strcmp(curr->next->content, "rb\n") == 0))
+				|| (strcmp(curr->content, "rb\n") == 0
+					&& strcmp(curr->next->content, "ra\n") == 0)))
 			{
 				ft_putstr_fd("rr\n", 1);
 				free(curr->next);
@@ -118,8 +119,8 @@ int	main(int argc, char **argv)
 		variable_list.size = stack_size(variable_list.stack_a);
 		size = variable_list.size;
 		insert_arr(&variable_list, &vars, size);
-		insertionSort(vars.array, size);
-		if (is_sorted(variable_list.stack_a))
+		array_insertion_sort(vars.array, size);
+		if (is_cdll_sorted(variable_list.stack_a))
 		{
 			return (0);
 		}
@@ -152,7 +153,7 @@ int	main(int argc, char **argv)
 			b2a(&variable_list, &vars);
 		}
 	}
-	// 	if (is_sorted(variable_list.stack_a))
+	// 	if (is_cdll_sorted(variable_list.stack_a))
 	// 	printf("===sorted===\n");
 	// else
 	// 	printf("=NOT_sorted=\n");
