@@ -13,7 +13,7 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include "../printf/ft_printf.h"
+# include "./libft/libft.h"
 # include <limits.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -36,6 +36,7 @@ typedef struct s_variable_list
 {
 	t_dll_stack			*stack_a;
 	t_dll_stack			*stack_b;
+	t_list				*stack_output;
 	int					size;
 }						t_var_list;
 
@@ -61,43 +62,47 @@ void					ft_swap(t_stack *a, t_stack *b);
 
 void	random_three_num(t_var_list *variable_list,
 						t_dll_stack **stack);
-void					rra(t_dll_stack **stack);
 void	random_five_num(t_var_list *variable_list,
 						t_indexing *vars);
 //Doubly linked list
 t_dll_stack				*new_circular_doubly(int data);
-t_dll_stack				*add_at_begin(t_dll_stack *tail, int data);
 void					add_last(t_dll_stack **head, int data);
 void					del_first(t_dll_stack **head);
-t_dll_stack				*del_last(t_dll_stack *tail);
-t_dll_stack				*insert_after(t_dll_stack *tail, int data, int pos);
-t_dll_stack				*del_inter(t_dll_stack *tail, int pos);
+// t_dll_stack				*del_last(t_dll_stack *tail);
 //actions
 void					sa(t_var_list *variable_list);
 void					sb(t_var_list *variable_list);
-void					ra(t_dll_stack **stack);
-void					rra(t_dll_stack **stack);
+// void					ra(t_dll_stack **stack);
+void					ra(t_var_list *variable_list);
+// void					rra(t_dll_stack **stack);
+void					rra(t_var_list *variable_list);
 void					pa(t_var_list *variable_list);
 void					pb(t_var_list *variable_list);
-void					rb(t_dll_stack **stack);
-void					rrb(t_dll_stack **stack);
+// void					rb(t_dll_stack **stack);
+void					rb(t_var_list *variable_list);
+// void					rrb(t_dll_stack **stack);
+void					rrb(t_var_list *variable_list);
 void					rotate_dll(t_dll_stack **head);
 void					rrotate_dll(t_dll_stack **head);
 void					push_top_to_dll(t_dll_stack **dst, t_dll_stack **src);
 void					print_dll(t_dll_stack *head);
-int						multi_rra(t_dll_stack **stack, int times);
-void					multi_ra(t_dll_stack **stack, int times);
-int						multi_rrb(t_dll_stack **stack, int times);
-int						multi_rb(t_dll_stack **stack, int times);
+// int						multi_rra(t_dll_stack **stack, int times);
+int						multi_rra(t_var_list *variable_list, int times);
+// void					multi_ra(t_dll_stack **stack, int times);
+void					multi_ra(t_var_list *variable_list, int times);
+// int						multi_rrb(t_dll_stack **stack, int times);
+int						multi_rrb(t_var_list *variable_list, int times);
+// int						multi_rb(t_dll_stack **stack, int times);
+int						multi_rb(t_var_list *variable_list, int times);
 void					rr(t_dll_stack **stack_a, t_dll_stack **stack_b);
 void					rrr(t_dll_stack **stack_a, t_dll_stack **stack_b);
 void					check_top_b(t_dll_stack **stack);
 
-void					insertBegin(t_dll_stack **tail, int value);
+void					insert_at_begin(t_dll_stack **tail, int value);
 void					swap_dll(t_dll_stack **head);
 int						stack_size(t_dll_stack *tail);
-int						find_largest_num(t_dll_stack *tail);
-int						find_smallest_num(t_dll_stack *tail);
+// int						find_largest_num(t_dll_stack *tail);
+// int						find_smallest_num(t_dll_stack *tail);
 bool					is_sorted(t_dll_stack *head);
 void					print(t_dll_stack *head);
 
@@ -122,7 +127,7 @@ void	b2a(t_var_list *variable_list,
 void					b2A(t_var_list *var_list, t_indexing *vars);
 int						find_highest_1(t_dll_stack *stack, t_indexing *vars,
 							int size);
-void					check_top_a(t_dll_stack **stack);
+void					check_top_a(t_var_list **variable_list);
 void					write_error(char *error_str);
 int						ft_atoi_overflow(char *str);
 int						A2B(t_var_list *variable_list, t_indexing *list,

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   doubly_linked_list.c                               :+:    :+:            */
+/*   circular_doubly_linked_list.c                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nakanoun <nakanoun@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -24,12 +24,12 @@ t_dll_stack	*new_circular_doubly(int data)
 	new_node->prev = new_node;
 	return (new_node);
 }
+
 void	insertBegin(t_dll_stack **head, int value)
 {
 	t_dll_stack	*new_node;
 	t_dll_stack	*tail;
 
-	// Pointer points to last Node
 	new_node = new_circular_doubly(value);
 	if (*head == NULL)
 	{
@@ -46,28 +46,7 @@ void	insertBegin(t_dll_stack **head, int value)
 	// and last.
 	// Update start pointer
 	(*head) = new_node;
-	// printf("new=%d \thead=%d\ttail=%d\n", new_node->data, (*head)->data,
-	// 		tail->data);
 	return ;
-}
-
-t_dll_stack	*add_at_begin(t_dll_stack *tail, int data)
-{
-	t_dll_stack	*new_node;
-	t_dll_stack	*temp;
-
-	new_node = new_circular_doubly(data);
-	if (tail == NULL)
-		tail = new_node;
-	else
-	{
-		temp = tail->next;
-		new_node->next = temp;
-		new_node->prev = tail;
-		temp->prev = new_node;
-		tail->next = new_node;
-	}
-	return (tail);
 }
 
 void	del_first(t_dll_stack **head)
@@ -121,30 +100,6 @@ int	stack_size(t_dll_stack *head)
 	return (count);
 }
 
-t_dll_stack	*insert_after(t_dll_stack *tail, int data, int pos)
-{
-	t_dll_stack	*new_node;
-	t_dll_stack	*temp;
-
-	new_node = new_circular_doubly(data);
-	if (tail == NULL)
-		return (new_node);
-	temp = tail->next;
-	while (pos > 1)
-	{
-		temp = temp->next;
-		pos--;
-	}
-	// temp = add_last(temp, data);
-	new_node->prev = temp;
-	new_node->next = temp->next;
-	new_node->next->prev = new_node;
-	temp->next = new_node;
-	if (temp == tail)
-		tail = tail->next;
-	return (tail);
-}
-
 void	add_last(t_dll_stack **head, int data)
 {
 	t_dll_stack	*new_node;
@@ -165,18 +120,17 @@ void	add_last(t_dll_stack **head, int data)
 
 void	rotate_dll(t_dll_stack **head)
 {
-	// t_dll_stack	*temp;
 	t_dll_stack	*tail;
 
 	if (*head == NULL)
 		return ;
 	tail = (*head)->prev;
-	// temp = (*head)->next;
 	tail = (*head);
 	(*head) = (*head)->next;
 	(*head)->prev = tail;
 	tail->next = (*head);
 }
+
 void	print(t_dll_stack *head)
 {
 	t_dll_stack	*tail;
@@ -194,6 +148,7 @@ void	print(t_dll_stack *head)
 	}
 	printf("content: %d\n", head->data);
 }
+
 void	rrotate_dll(t_dll_stack **head)
 {
 	t_dll_stack	*tail;
@@ -242,67 +197,41 @@ void	push_top_to_dll(t_dll_stack **dst, t_dll_stack **src)
 	return ;
 }
 
-t_dll_stack	*del_last(t_dll_stack *tail)
-{
-	t_dll_stack	*temp;
-
-	if (tail == NULL)
-		return (tail);
-	temp = tail->next;
-	if (tail == temp)
-	{
-		free(tail);
-		tail = NULL;
-		return (tail);
-	}
-	tail->prev->next = temp;
-	temp->prev = tail->prev;
-	free(tail);
-	tail = temp->prev;
-	return (tail);
-}
-
-void	print_dll(t_dll_stack *head)
+bool	is_sorted(t_dll_stack *head)
 {
 	t_dll_stack	*temp;
 
 	if (head == NULL)
-		printf("No element is the list\n");
-	else
+		return (true);
+	temp = head;
+	while (temp->next != head)
 	{
-		temp = head;
-		while (temp->next != head)
-		{
-			printf("%d\n", temp->data);
-			temp = temp->next;
-		}
-		printf("%d\n", temp->data);
+		if (temp->data > temp->next->data)
+			return (false);
+		temp = temp->next;
 	}
+	return (true);
 }
 
-t_dll_stack	*del_inter(t_dll_stack *tail, int pos)
+/* void	del_last(t_dll_stack *head)
 {
 	t_dll_stack	*temp;
-	t_dll_stack	*temp2;
 
-	if (tail == NULL)
-		return (tail);
-	temp = tail->next;
-	while (pos > 1)
+	if (head == NULL)
+		return ;
+	temp = head->prev;
+	if (head == temp)
 	{
-		temp = temp->next;
-		pos--;
+		free(head);
+		head = NULL;
+		return ;
 	}
-	temp2 = temp->prev;
-	temp2->next = temp->next;
-	temp->next->prev = temp2;
+	head->prev = temp->prev;
+	temp->prev->next = head;
 	free(temp);
-	if (temp == tail)
-		tail = temp2;
-	return (tail);
-}
+} */
 
-int	find_largest_num(t_dll_stack *tail)
+/* int	find_largest_num(t_dll_stack *tail)
 {
 	int			max;
 	int			index;
@@ -310,7 +239,6 @@ int	find_largest_num(t_dll_stack *tail)
 
 	index = 0;
 	max = INT_MIN;
-	// max = head->item;
 	temp = tail->next;
 	while (temp)
 	{
@@ -332,6 +260,7 @@ int	find_smallest_num(t_dll_stack *tail)
 	int			min;
 	int			index;
 	t_dll_stack	*temp;
+	t_dll_stack	*temp;
 
 	index = 0;
 	min = INT_MAX;
@@ -350,30 +279,10 @@ int	find_smallest_num(t_dll_stack *tail)
 	}
 	printf("Min=%d\n", min);
 	return (index);
-}
+} */
 
-bool	is_sorted(t_dll_stack *head)
-{
-	t_dll_stack	*temp;
-
-	if (head == NULL)
-		return (true);
-	temp = head;
-	while (temp->next != head)
-	{
-		if (temp->data > temp->next->data)
-			return (false);
-		temp = temp->next;
-	}
-	return (true);
-}
 
 /* 
-
-void	check_leaks(void)
-{
-	system("leaks -q a.out");
-}
 int	main(void)
 {
 	t_dll_stack	*tail;
@@ -381,20 +290,23 @@ int	main(void)
 
 	tail = NULL;
 	tail2 = NULL;
-	atexit(check_leaks);
+	// atexit(check_leaks);
 	// tail = new_circular_doubly(4);
 	add_last(&tail, 1);
 	add_last(&tail, 3);
-	// add_last(&tail, 2);
-	// add_last(&tail, 5);
-	// add_last(&tail, 4);
+	add_last(&tail, 2);
+	add_last(&tail, 5);
+	del_last(tail);
+	add_last(&tail, 4);
 	// push_top_to_dll(&tail2,&tail);
 	// push_top_to_dll(&tail2,&tail);
 	// swap_dll(&tail);
-	// printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
-	// 		tail->data,
-	// 	tail->prev->data, tail->prev->prev->data,
-	// 	tail->next->data, tail->next->next->data);
+	printf("head=%d\ttail=%d head->p->p %d head->n=%d head->n->n=%d \n",
+			tail->data,
+			tail->prev->data,
+			tail->prev->prev->data,
+			tail->next->data,
+			tail->next->next->data);
 	// rotate_dll(&tail);
 	// rrotate_dll(&tail);
 	print(tail);
@@ -418,7 +330,7 @@ int	main(void)
 	// printf("\ndel2_head%d==head.next=%d=head.prev=%d\n", tail->data,
 	// 		tail->next->data, tail->prev->data);
 	// print(tail);
-	printf("debugging\n");
+	// printf("debugging\n");
 	// del_first(&tail);
 	// ra(&tail);
 	// exit(0);
@@ -444,6 +356,5 @@ int	main(void)
 	// printf("\nstack2\n");
 	// print_dll(tail2);
 	// printf("index of max=%d",find_largest_num(tail));
-	free_2d(tail);
 }
  */

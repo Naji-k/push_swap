@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "push_swap.h"
+#include <string.h>
 
 int	check_doubles(t_dll_stack *tail, int num)
 {
@@ -33,6 +34,30 @@ int	check_doubles(t_dll_stack *tail, int num)
 void	check_leaks(void)
 {
 	system("leaks -q push_swap");
+}
+void	print_lst(t_list **lst)
+{
+	t_list	*curr;
+
+	while (*lst != NULL)
+	{
+		curr = (*lst);
+		if (((strcmp(curr->content, "ra\n") == 0 && strcmp(curr->next->content,
+					"rb\n") == 0)) || (strcmp(curr->content, "rb\n") == 0
+			&& strcmp(curr->next->content, "ra\n") == 0))
+			{
+				ft_putstr_fd("rr\n", 1);
+				free(curr->next);
+				*lst = (*lst)->next->next;
+				free(curr);
+			}
+		else
+		{
+			ft_putstr_fd(curr->content, 1);
+			free(curr);
+			*lst = (*lst)->next;
+		}
+	}
 }
 
 void	write_error(char *error_str)
@@ -67,6 +92,7 @@ int	main(int argc, char **argv)
 
 	variable_list.stack_a = NULL;
 	variable_list.stack_b = NULL;
+	// atexit(check_leaks);
 	if (argc > 1)
 	{
 		i = 1;
@@ -126,13 +152,13 @@ int	main(int argc, char **argv)
 			b2a(&variable_list, &vars);
 		}
 	}
-	/* 	if (is_sorted(variable_list.stack_a))
-		printf("===sorted===\n");
-	else
-		printf("=NOT_sorted=\n"); */
+	// 	if (is_sorted(variable_list.stack_a))
+	// 	printf("===sorted===\n");
+	// else
+	// 	printf("=NOT_sorted=\n");
+	print_lst(&variable_list.stack_output);
 	free_all(&variable_list.stack_a);
 	free_all(&variable_list.stack_b);
-	// atexit(check_leaks);
 }
 
 /* Debugging

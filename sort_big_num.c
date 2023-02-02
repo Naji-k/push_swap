@@ -14,10 +14,10 @@
 
 void	insert_arr(t_var_list *variable_list, t_indexing *list, int size)
 {
-	// t_dll_stack	*tail;
 	t_dll_stack	*current;
 	int			i;
 
+	// t_dll_stack	*tail;
 	// tail = variable_list->stack_a->prev;
 	current = variable_list->stack_a;
 	i = 0;
@@ -148,13 +148,15 @@ int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 			moved++;
 			pb(variable_list);
 			if (variable_list->stack_b->data < mid)
-				rb(&variable_list->stack_b);
+				// rb(&variable_list->stack_b);
+				rb(variable_list);
 		}
 		if (variable_list->stack_a == NULL)
 		{
 			return (0);
 		}
-		ra(&variable_list->stack_a);
+		// ra(&variable_list->stack_a);
+		ra(variable_list);
 	}
 	return (moved);
 }

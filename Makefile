@@ -17,10 +17,10 @@ CC = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
-LIB = ../printf/libftprintf.a
+LIB = ./libft/libft.a
 Make = make
 
-SRC = doubly_linked_list.c \
+SRC = circular_doubly_linked_list.c \
 	main.c \
 	p_s_actions.c \
 	push_swap.c \
@@ -32,7 +32,7 @@ OBJS = ${SRC:.c=.o}
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	cd ../printf && $(MAKE)
+	cd ./libft && $(MAKE) bonus
 	$(CC) -o ${NAME} ${OBJS} $(LIB)
 
 %.o : %.c
@@ -44,6 +44,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	cd ../printf && $(MAKE) fclean
+	cd ./libft && $(MAKE) fclean
 
 re: fclean all
