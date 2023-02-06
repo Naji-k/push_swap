@@ -134,16 +134,3 @@ int	a2b(t_var_list *variable_list, t_indexing *list, int size)
 	}
 	return (moved);
 }
-/* 
-void	sort_big_numbers(t_var_list *variable_list, t_indexing *list)
-{
-	int offset;
-	cal_start_end(variable_list, list);
-	// printf("size = %d\toffset=%d\tstart=%d\tend=%d\n",
-	// 		variable_list->size,
-	// 		list->offset,
-	// 		list->start,
-	// 		list->end);
-	// offset = a2b(variable_list);
-	// print_array(list->array,variable_list->size);
-} */

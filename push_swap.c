@@ -176,8 +176,38 @@ void	push_smallest_number(t_var_list *variable_list, t_indexing *vars, int i)
 void	random_five_num(t_var_list *variable_list, t_indexing *vars)
 {
 	push_smallest_number(variable_list, vars, 0);
-	push_smallest_number(variable_list, vars, 1);
+	if (variable_list->size == 5)
+		push_smallest_number(variable_list, vars, 1);
 	random_three_num(variable_list, &variable_list->stack_a);
 	pa(variable_list);
 	pa(variable_list);
+}
+
+int	check_same_operations(t_list *lst)
+{
+	t_list	*curr;
+
+	curr = lst;
+	if (((ft_strncmp(curr->content, "ra\n", 2) == 0
+				&& ft_strncmp(curr->next->content, "rb\n", 2) == 0))
+		|| (ft_strncmp(curr->content, "rb\n", 2) == 0
+			&& ft_strncmp(curr->next->content, "ra\n", 2) == 0))
+	{
+		return (1);
+	}
+	else if (((ft_strncmp(curr->content, "sa\n", 2) == 0
+				&& ft_strncmp(curr->next->content, "sb\n", 2) == 0))
+		|| (ft_strncmp(curr->content, "sb\n", 2) == 0
+			&& ft_strncmp(curr->next->content, "sa\n", 2) == 0))
+	{
+		return (2);
+	}
+	else if (((ft_strncmp(curr->content, "rra\n", 3) == 0
+				&& ft_strncmp(curr->next->content, "rrb\n", 3) == 0))
+		|| (ft_strncmp(curr->content, "rrb\n", 3) == 0
+			&& ft_strncmp(curr->next->content, "rra\n", 3) == 0))
+	{
+		return (3);
+	}
+	return (0);
 }

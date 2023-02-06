@@ -26,6 +26,7 @@ SRC = circular_doubly_linked_list.c \
 	push_swap.c \
 	sort_big_num.c \
 	parsing_inputs.c \
+	sort_numbers.c \
 
 OBJS = ${SRC:.c=.o}
 

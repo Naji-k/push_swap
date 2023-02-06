@@ -23,17 +23,17 @@ static bool	check_overflow(int num1, int num2)
 
 int	ft_atoi_overflow(char *str)
 {
-	int i;
-	int sign;
-	int num;
-	int num2;
+	int	i;
+	int	sign;
+	int	num;
+	int	num2;
 
 	num = 0;
 	sign = 1;
 	i = 0;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' || str[i] == '\f'
-		|| str[i] == '\r' || str[i] == ' ')
-		i++;
+	// while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' || str[i] == '\f'
+	// 	|| str[i] == '\r' || str[i] == ' ')
+	// 	i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
@@ -52,4 +52,50 @@ int	ft_atoi_overflow(char *str)
 		i++;
 	}
 	return (num * sign);
+}
+
+static bool	push_swap_check_valid_input(char *argv)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(argv[i]))
+		return (true);
+	else if (argv[i] == '-' && ft_isdigit(argv[i + 1]))
+		return (true);
+	else if (argv[i] == '+' && ft_isdigit(argv[i + 1]))
+		return (true);
+	return (false);
+}
+
+
+
+int	parse_input(int argc, char **argv, t_var_list *variable_list)
+{
+	int	i;
+	int	num;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (push_swap_check_valid_input(argv[i]))
+		{
+			num = ft_atoi_overflow(argv[i]);
+			if (check_doubles(variable_list->stack_a, num))
+			{
+				write_error("doubles\n");
+				free_all(&variable_list->stack_a);
+				return (-1);
+			}
+			add_last(&variable_list->stack_a, num);
+			i++;
+		}
+		else
+		{
+			write_error("not digits\n");
+			free_all(&variable_list->stack_a);
+			return (-1);
+		}
+	}
+	return (i - 1);
 }

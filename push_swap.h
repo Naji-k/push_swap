@@ -52,8 +52,8 @@ typedef struct s_indexing
 	int					array[1000];
 }						t_indexing;
 
-void					random_five_num(t_var_list *variable_list,
-							t_indexing *vars);
+void	random_five_num(t_var_list *variable_list,
+						t_indexing *vars);
 void					rotate_stack(t_stack **stack);
 void					rrotate_stack(t_stack **stack);
 int						check_doubles(t_dll_stack *stack, int num);
@@ -61,8 +61,8 @@ void					push_top_to_another(t_stack **dst, t_stack **src);
 void					swap_stack(t_stack *stack);
 void					pop(t_stack **stack);
 void					ft_swap(t_stack *a, t_stack *b);
-void					random_three_num(t_var_list *variable_list,
-							t_dll_stack **stack);
+void	random_three_num(t_var_list *variable_list,
+						t_dll_stack **stack);
 //Doubly linked list
 t_dll_stack				*new_circular_doubly(int data);
 void					add_last(t_dll_stack **head, int data);
@@ -98,13 +98,12 @@ void					insert_arr(t_var_list *variable_list, t_indexing *list,
 							int size);
 void					print_array(int *arr, int size);
 void					array_insertion_sort(int array[], int size);
-void					cal_start_end(t_var_list *variable_list,
-							t_indexing *list);
+void	cal_start_end(t_var_list *variable_list,
+					t_indexing *list);
 bool					in_range(int start, int end, t_dll_stack *curr);
 int						a2b(t_var_list *variable_list, t_indexing *list,
 							int size);
-void					sort_big_numbers(t_var_list *variable_list,
-							t_indexing *list);
+
 void					insert_in_sorted_list(t_var_list *variable_list);
 int						search_for_highest(t_dll_stack *stack, t_indexing *vars,
 							int size);
@@ -117,5 +116,12 @@ void					write_error(char *error_str);
 int						ft_atoi_overflow(char *str);
 int						A2B(t_var_list *variable_list, t_indexing *list,
 							int size);
-
+int						check_same_operations(t_list *lst);
+int						parse_input(int argc, char **argv,
+							t_var_list *variable_list);
+void					free_all(t_dll_stack **list);
+void	sort_numbers(t_var_list *variable_list,
+					t_indexing *vars);
+void	sort_big_numbers(t_var_list *variable_list,
+						t_indexing *vars);
 #endif

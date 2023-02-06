@@ -35,6 +35,7 @@ void	check_leaks(void)
 {
 	system("leaks -q push_swap");
 }
+
 void	print_lst(t_list **lst)
 {
 	t_list	*curr;
@@ -42,16 +43,18 @@ void	print_lst(t_list **lst)
 	while ((*lst) != NULL)
 	{
 		curr = (*lst);
-			if (curr->next != NULL && (((strcmp(curr->content, "ra\n") == 0
-						&& strcmp(curr->next->content, "rb\n") == 0))
-				|| (strcmp(curr->content, "rb\n") == 0
-					&& strcmp(curr->next->content, "ra\n") == 0)))
-			{
+		if (curr->next != NULL && check_same_operations(curr) != 0)
+		{
+			if (check_same_operations(curr) == 1)
 				ft_putstr_fd("rr\n", 1);
-				free(curr->next);
-				*lst = (*lst)->next->next;
-				free(curr);
-			}
+			else if (check_same_operations(curr) == 2)
+				ft_putstr_fd("ss\n", 1);
+			else if (check_same_operations(curr) == 3)
+				ft_putstr_fd("rrr\n", 1);
+			free(curr->next);
+			*lst = (*lst)->next->next;
+			free(curr);
+		}
 		else
 		{
 			ft_putstr_fd(curr->content, 1);
@@ -83,77 +86,39 @@ void	free_all(t_dll_stack **list)
 	free(*list);
 	*list = NULL;
 }
+
+void	free_exit(t_var_list *variable_list)
+{
+	free_all(&variable_list->stack_a);
+	free_all(&variable_list->stack_b);
+	exit(EXIT_SUCCESS);
+}
+
 int	main(int argc, char **argv)
 {
 	t_var_list	variable_list;
-	int			num;
 	int			i;
-	int			size;
 	t_indexing	vars;
 
+	// int			size;
+	// int			num;
 	variable_list.stack_a = NULL;
 	variable_list.stack_b = NULL;
 	// atexit(check_leaks);
 	if (argc > 1)
 	{
-		i = 1;
-		while (i < argc)
-		{
-			if (ft_isdigit(*argv[i]) || *argv[i] == '-' || *argv[i] == '+')
-			{
-				num = ft_atoi_overflow(argv[i]);
-				if (check_doubles(variable_list.stack_a, num))
-				{
-					write_error("doubles");
-					return (0);
-				}
-				add_last(&variable_list.stack_a, num);
-				i++;
-			}
-			else
-			{
-				write_error("not digit!\n");
-				return (0);
-			}
-		}
-		variable_list.size = stack_size(variable_list.stack_a);
-		size = variable_list.size;
-		insert_arr(&variable_list, &vars, size);
-		array_insertion_sort(vars.array, size);
-		if (is_cdll_sorted(variable_list.stack_a))
-		{
+		// i = 1;
+		i = parse_input(argc, argv, &variable_list);
+		if (i == -1)
 			return (0);
-		}
-		else if (size <= 3)
-		{
-			random_three_num(&variable_list, &variable_list.stack_a);
-		}
-		else if (size < 6)
-		{
-			random_five_num(&variable_list, &vars);
-		}
-		else
-		{
-			if (size <= 10)
-				vars.n = 5;
-			else if (size < 150)
-				vars.n = 8;
-			else
-				vars.n = 18;
-			vars.middle = size / 2;
-			vars.offset = (size / vars.n);
-			vars.start_index = vars.end_index = 0;
-			vars.start = vars.end = 0;
-			while (size > 3)
-			{
-				cal_start_end(&variable_list, &vars);
-				size -= a2b(&variable_list, &vars, size);
-			}
-			random_three_num(&variable_list, &variable_list.stack_a);
-			b2a(&variable_list, &vars);
-		}
+		// printf("i=%d\n", i);
+		variable_list.size = stack_size(variable_list.stack_a);
+		insert_arr(&variable_list, &vars, variable_list.size);
+		array_insertion_sort(vars.array, variable_list.size);
+		sort_numbers(&variable_list, &vars);
 	}
-	// 	if (is_cdll_sorted(variable_list.stack_a))
+	// 	print(variable_list.stack_a);
+	// if (is_cdll_sorted(variable_list.stack_a))
 	// 	printf("===sorted===\n");
 	// else
 	// 	printf("=NOT_sorted=\n");
