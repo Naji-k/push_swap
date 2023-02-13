@@ -31,7 +31,7 @@ void					cdll_insert_at_fist(t_cdll_stack **head, int value);
 void					print_cdll(t_cdll_stack *head);
 int						stack_size(t_cdll_stack *tail);
 bool					is_cdll_sorted(t_cdll_stack *head);
-void					free_all(t_cdll_stack **list);
+void					free_cdll(t_cdll_stack **list);
 void					swap_dll(t_cdll_stack **head);
 void					rotate_dll(t_cdll_stack **head);
 void					rrotate_dll(t_cdll_stack **head);

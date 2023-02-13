@@ -23,7 +23,6 @@ void	swap_dll(t_cdll_stack **head)
 	tail = (*head)->prev;
 	if (temp == tail)
 	{
-		(*head) = temp;
 		return ;
 	}
 	temp->next->prev = (*head);

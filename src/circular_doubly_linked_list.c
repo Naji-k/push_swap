@@ -111,7 +111,7 @@ void	add_last(t_cdll_stack **head, int data)
 	(*head)->prev = new_node;
 }
 
-void	print_cdll(t_cdll_stack *head)
+/* void	print_cdll(t_cdll_stack *head)
 {
 	t_cdll_stack	*tail;
 
@@ -127,4 +127,4 @@ void	print_cdll(t_cdll_stack *head)
 		head = head->next;
 	}
 	printf("content: %d\n", head->data);
-}
+} */

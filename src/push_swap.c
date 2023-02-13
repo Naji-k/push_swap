@@ -46,8 +46,8 @@ void	write_error_exit(t_var_list *variable_list)
 	write(STDERR_FILENO, "Error\n", 6);
 	if (variable_list != NULL)
 	{
-		free_all(&variable_list->stack_a);
-		free_all(&variable_list->stack_b);
+		free_cdll(&variable_list->stack_a);
+		free_cdll(&variable_list->stack_b);
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -81,7 +81,7 @@ void	print_lst(t_list **lst)
 	free(*lst);
 }
 
-void	free_all(t_cdll_stack **list)
+void	free_cdll(t_cdll_stack **list)
 {
 	t_cdll_stack	*temp;
 	t_cdll_stack	*tail;
@@ -99,9 +99,19 @@ void	free_all(t_cdll_stack **list)
 	*list = NULL;
 }
 
-void	free_exit(t_var_list *variable_list)
+void	free_all(t_var_list *variable_list)
 {
-	free_all(&variable_list->stack_a);
-	free_all(&variable_list->stack_b);
-	exit(EXIT_SUCCESS);
+	t_list	*tmp;
+
+	free_cdll(&variable_list->stack_a);
+	free_cdll(&variable_list->stack_b);
+	if (variable_list->stack_output != NULL)
+	{
+		while (variable_list->stack_output != NULL)
+		{
+			tmp = variable_list->stack_output;
+			variable_list->stack_output = variable_list->stack_output->next;
+			free(tmp);
+		}
+	}
 }

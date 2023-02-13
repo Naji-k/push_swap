@@ -99,5 +99,6 @@ int		b2a_highest_from_bottom_b(t_var_list *variable_list,
 			t_indexing *vars,
 			int level,
 			int size);
+void	free_all(t_var_list *variable_list);
 
 #endif

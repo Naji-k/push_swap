@@ -37,8 +37,8 @@ FILES = circular_doubly_linked_list.c \
 	p_s_algorithms.c \
 	p_s_b2a.c \
 
-BONUS_FILES = checker.c
-SOLVER = main.c
+BONUS_FILES = src/checker.c
+SOLVER = src/main.c
 SRC = $(addprefix src/, $(FILES))
 
 OBJS = ${SRC:.c=.o}

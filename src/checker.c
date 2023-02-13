@@ -15,6 +15,11 @@
 #include "push_swap.h"
 #include <stdio.h>
 
+void	check_leaks(void)
+{
+	system("leaks checker");
+}
+
 int	main(int argc, char **argv)
 {
 	t_var_list	variable_list;
@@ -29,12 +34,19 @@ int	main(int argc, char **argv)
 		if (i == -1)
 			return (0);
 		read_operation(&variable_list);
+		if (is_cdll_sorted(variable_list.stack_a)
+			&& (variable_list.stack_b == NULL))
+		{
+			ft_putstr_fd("OK\n", 1);
+			free_all(&variable_list);
+		}
+		else
+		{
+			ft_putstr_fd("KO\n", 1);
+			free_all(&variable_list);
+		}
 	}
-	if (is_cdll_sorted(variable_list.stack_a)
-		&& (variable_list.stack_b == NULL))
-		printf("OK\n");
-	else
-		printf("KO\n");
+	check_leaks();
 }
 
 int	read_operation(t_var_list *variable_list)

@@ -42,10 +42,3 @@ void	rr(t_var_list *variable_list)
 	rotate_dll(&variable_list->stack_b);
 	ft_lstadd_last_content(&variable_list->stack_output, "rr\n");
 }
-
-void	rrr(t_var_list *variable_list)
-{
-	rrotate_dll(&variable_list->stack_a);
-	rrotate_dll(&variable_list->stack_b);
-	ft_lstadd_last_content(&variable_list->stack_output, "rrr\n");
-}
