@@ -12,39 +12,66 @@
 
 NAME = push_swap
 
+BONUS = checker
+
+INCLUDE = -Iinclude -Ilibft/include -Iget_next_line/include
 
 CC = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
-LIB = ./libft/libft.a
+LIB = libft.a
+LIB_BONUS = get_next_line.a
 Make = make
 
-SRC = circular_doubly_linked_list.c \
-	main.c \
+FILES = circular_doubly_linked_list.c \
+	p_s_actions_support.c \
 	p_s_actions.c \
+	p_s_rotate_actions.c \
+	p_s_multi_actions.c \
 	push_swap.c \
-	sort_big_num.c \
-	parsing_inputs.c \
 	sort_numbers.c \
+	sort_small_numbers.c \
+	sort_big_num_a2b.c \
+	parsing_inputs.c \
+	p_s_algorithms.c \
+	p_s_b2a.c \
+
+BONUS_FILES = checker.c
+SOLVER = main.c
+SRC = $(addprefix src/, $(FILES))
 
 OBJS = ${SRC:.c=.o}
+OBJS_SOLVER = ${SOLVER:.c=.o}
+OBJS_BONUS = ${BONUS_FILES:.c=.o}
 
-all: ${NAME}
+all: ${NAME} $(BONUS)
 
-${NAME}:	${OBJS}
-	cd ./libft && $(MAKE) bonus
-	$(CC) -o ${NAME} ${OBJS} $(LIB)
+${NAME}:	${OBJS} ${OBJS_SOLVER}
+	cd ./libft && $(Make) bonus
+	cp ./libft/libft.a .
+	$(CC) $(FLAGS) ${OBJS} ${OBJS_SOLVER} $(INCLUDE) $(LIB) -o $@
+
+$(BONUS):	${OBJS} $(OBJS_BONUS)
+	# cd ./libft && $(Make) bonus
+	# cp ./libft/libft.a .
+	cd ./get_next_line && $(MAKE)
+	cp ./get_next_line/get_next_line.a .
+	$(CC) $(FLAGS) ${OBJS} $(OBJS_BONUS) $(INCLUDE) $(LIB) $(LIB_BONUS) -o $@
 
 %.o : %.c
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) -c $(FLAGS) $(INCLUDE) $^ -o $@
+
 
 clean:
-	rm -f $(OBJS);
-	cd ../printf && $(MAKE) clean
+	rm -f $(OBJS) $(OBJS_BONUS) ${OBJS_SOLVER};
+	rm $(LIB) $(LIB_BONUS);
+	cd ./libft && $(MAKE) clean
+	cd ./get_next_line && $(MAKE) clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(BONUS);
 	cd ./libft && $(MAKE) fclean
+	cd ./get_next_line && $(MAKE) fclean
 
 re: fclean all

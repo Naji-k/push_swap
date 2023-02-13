@@ -31,7 +31,8 @@ int	ft_atoi_overflow(char *str)
 	num = 0;
 	sign = 1;
 	i = 0;
-	// while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' || str[i] == '\f'
+	// while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+	// || str[i] == '\f'
 	// 	|| str[i] == '\r' || str[i] == ' ')
 	// 	i++;
 	if (str[i] == '+' || str[i] == '-')
@@ -45,10 +46,7 @@ int	ft_atoi_overflow(char *str)
 		num2 = num;
 		num = num * 10 + str[i] - '0';
 		if (check_overflow(num * sign, num2 * sign))
-		{
-			write_error("over flow");
-			exit(EXIT_SUCCESS);
-		}
+			write_error_exit(NULL);
 		i++;
 	}
 	return (num * sign);
@@ -68,8 +66,6 @@ static bool	push_swap_check_valid_input(char *argv)
 	return (false);
 }
 
-
-
 int	parse_input(int argc, char **argv, t_var_list *variable_list)
 {
 	int	i;
@@ -83,19 +79,33 @@ int	parse_input(int argc, char **argv, t_var_list *variable_list)
 			num = ft_atoi_overflow(argv[i]);
 			if (check_doubles(variable_list->stack_a, num))
 			{
-				write_error("doubles\n");
-				free_all(&variable_list->stack_a);
-				return (-1);
+				write_error_exit(variable_list);
 			}
 			add_last(&variable_list->stack_a, num);
 			i++;
 		}
 		else
 		{
-			write_error("not digits\n");
-			free_all(&variable_list->stack_a);
-			return (-1);
+			write_error_exit(variable_list);
 		}
 	}
 	return (i - 1);
+}
+
+int	check_doubles(t_cdll_stack *tail, int num)
+{
+	t_cdll_stack	*temp;
+
+	if (tail == NULL)
+		return (0);
+	temp = tail->next;
+	while (tail)
+	{
+		if (num == temp->data)
+			return (1);
+		temp = temp->next;
+		if (temp == tail->next)
+			return (0);
+	}
+	return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sort_big_num.c                                     :+:    :+:            */
+/*   p_s_algorithms.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nakanoun <nakanoun@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/01/19 00:39:00 by nakanoun      #+#    #+#                 */
-/*   Updated: 2023/01/19 00:39:00 by nakanoun      ########   odam.nl         */
+/*   Created: 2023/02/07 14:15:41 by nakanoun      #+#    #+#                 */
+/*   Updated: 2023/02/07 14:15:41 by nakanoun      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	insert_arr(t_var_list *variable_list, t_indexing *list, int size)
 {
-	t_dll_stack	*current;
-	int			i;
+	t_cdll_stack	*current;
+	int				i;
 
 	current = variable_list->stack_a;
 	i = 0;
@@ -26,16 +26,6 @@ void	insert_arr(t_var_list *variable_list, t_indexing *list, int size)
 		i++;
 	}
 	list->array[i] = current->data;
-}
-
-void	print_array(int *arr, int size)
-{
-	int	i;
-
-	i = 0;
-	printf("array= ");
-	while (i < size)
-		printf("%d ", arr[i++]);
 }
 
 void	array_insertion_sort(int array[], int size)
@@ -82,19 +72,17 @@ void	cal_start_end(t_var_list *variable_list, t_indexing *list)
 	list->end = list->array[list->end_index];
 }
 
-bool	in_range(int start, int end, t_dll_stack *curr)
+bool	in_range(int start, int end, t_cdll_stack *curr)
 {
 	if (curr == NULL)
-	{
 		return (0);
-	}
 	return (curr->data >= start && curr->data <= end);
 }
 
-int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
+int	number_in_chunk_level(t_cdll_stack *stack, t_indexing *vars)
 {
-	int			level;
-	t_dll_stack	*tail;
+	int				level;
+	t_cdll_stack	*tail;
 
 	level = 0;
 	tail = stack->prev;
@@ -106,31 +94,4 @@ int	number_in_chunk_level(t_dll_stack *stack, t_indexing *vars)
 			return (level);
 	}
 	return (level);
-}
-
-int	a2b(t_var_list *variable_list, t_indexing *list, int size)
-{
-	int	mid;
-	int	moved;
-	int	chunk;
-
-	moved = 0;
-	mid = list->array[list->middle];
-	chunk = list->offset * 2;
-	if (size < (list->offset * 2))
-		chunk = size;
-	while (chunk > 0 && size > 3)
-	{
-		while (in_range(list->start, list->end, variable_list->stack_a))
-		{
-			size--;
-			chunk--;
-			moved++;
-			pb(variable_list);
-			if (variable_list->stack_b->data < mid)
-				rb(variable_list);
-		}
-		ra(variable_list);
-	}
-	return (moved);
 }
