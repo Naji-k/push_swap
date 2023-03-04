@@ -26,15 +26,18 @@ int	main(int argc, char **argv)
 	variable_list.stack_a = NULL;
 	variable_list.stack_b = NULL;
 	variable_list.stack_output = NULL;
-	if (argc > 1)
+	if (argc < 2)
+		return (0);
+	if (argc >= 2)
 	{
 		i = parse_input(argc, argv, &variable_list);
-		if (i == -1)
+		if (i == 1)
 			return (0);
 		variable_list.size = stack_size(variable_list.stack_a);
 		insert_arr(&variable_list, &vars, variable_list.size);
 		array_insertion_sort(vars.array, variable_list.size);
-		sort_numbers(&variable_list, &vars);
+		if (!is_cdll_sorted(variable_list.stack_a))
+			sort_numbers(&variable_list, &vars);
 	}
 	print_lst(&variable_list.stack_output);
 	free_all(&variable_list);

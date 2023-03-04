@@ -49,7 +49,7 @@ void	write_error_exit(t_var_list *variable_list)
 		free_cdll(&variable_list->stack_a);
 		free_cdll(&variable_list->stack_b);
 	}
-	exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
 }
 
 void	print_lst(t_list **lst)

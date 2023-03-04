@@ -28,11 +28,11 @@ int	main(int argc, char **argv)
 	variable_list.stack_a = NULL;
 	variable_list.stack_b = NULL;
 	variable_list.stack_output = NULL;
-	if (argc > 1)
+	if (argc >= 2)
 	{
 		i = parse_input(argc, argv, &variable_list);
-		if (i == -1)
-			return (0);
+		if (i == 1)
+			write_error_exit(&variable_list);
 		read_operation(&variable_list);
 		if (is_cdll_sorted(variable_list.stack_a)
 			&& (variable_list.stack_b == NULL))
@@ -46,7 +46,7 @@ int	main(int argc, char **argv)
 			free_all(&variable_list);
 		}
 	}
-	check_leaks();
+	return (0);
 }
 
 int	read_operation(t_var_list *variable_list)

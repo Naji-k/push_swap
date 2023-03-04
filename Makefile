@@ -11,18 +11,17 @@
 # **************************************************************************** #
 
 NAME = push_swap
-
 BONUS = checker
 
 INCLUDE = -Iinclude -Ilibft/include -Iget_next_line/include
 
-CC = gcc
-
 FLAGS = -Wall -Wextra -Werror
+LIBFT_DIR = ./libft
+GNL_DIR = ./get_next_line
 
-LIB = libft.a
-LIB_BONUS = get_next_line.a
-Make = make
+LIB = $(LIBFT_DIR)/libft.a
+LIB_BONUS = $(GNL_DIR)/get_next_line.a
+
 
 FILES = circular_doubly_linked_list.c \
 	p_s_actions_support.c \
@@ -45,33 +44,34 @@ OBJS = ${SRC:.c=.o}
 OBJS_SOLVER = ${SOLVER:.c=.o}
 OBJS_BONUS = ${BONUS_FILES:.c=.o}
 
-all: ${NAME} $(BONUS)
+all:	$(NAME) bonus
 
-${NAME}:	${OBJS} ${OBJS_SOLVER}
-	cd ./libft && $(Make) bonus
-	cp ./libft/libft.a .
-	$(CC) $(FLAGS) ${OBJS} ${OBJS_SOLVER} $(INCLUDE) $(LIB) -o $@
+$(NAME):	lib $(OBJS) $(OBJS_SOLVER)
+	@$(CC) $(OBJS) $(OBJS_SOLVER) $(INCLUDE) $(LIB) -o $@
 
-$(BONUS):	${OBJS} $(OBJS_BONUS)
-	# cd ./libft && $(Make) bonus
-	# cp ./libft/libft.a .
-	cd ./get_next_line && $(MAKE)
-	cp ./get_next_line/get_next_line.a .
-	$(CC) $(FLAGS) ${OBJS} $(OBJS_BONUS) $(INCLUDE) $(LIB) $(LIB_BONUS) -o $@
+bonus: 	lib gnl ${OBJS} $(OBJS_BONUS)
+		@$(CC) $(FLAGS) ${OBJS} $(OBJS_BONUS) $(INCLUDE) $(LIB) $(LIB_BONUS) -o $(BONUS)
 
-%.o : %.c
-	$(CC) -c $(FLAGS) $(INCLUDE) $^ -o $@
+%.o: %.c
+	$(CC) -c $(FLAGS) $(INCLUDE) $< -o $@
+
+lib:
+	@make -sC $(LIBFT_DIR)
+
+gnl:
+	@make -sC$(GNL_DIR)
 
 
 clean:
 	rm -f $(OBJS) $(OBJS_BONUS) ${OBJS_SOLVER};
-	rm $(LIB) $(LIB_BONUS);
-	cd ./libft && $(MAKE) clean
-	cd ./get_next_line && $(MAKE) clean
+	# rm $(LIB) $(LIB_BONUS);
+	@make clean -C $(GNL_DIR)
+	@make clean -C $(LIBFT_DIR)
 
 fclean: clean
 	rm -f $(NAME) $(BONUS);
-	cd ./libft && $(MAKE) fclean
-	cd ./get_next_line && $(MAKE) fclean
+	@make fclean -C $(GNL_DIR)
+	@make fclean -C $(LIBFT_DIR)
 
 re: fclean all
+.PHONY: all lib gnl clean fclean re

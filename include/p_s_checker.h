@@ -10,9 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#ifndef P_S_CHECKER_H
+# define P_S_CHECKER_H
+
+# include "push_swap.h"
 
 typedef void	(*t_push_swap_actions_list)(t_var_list *variable_list);
 int				read_operation(t_var_list *variable_list);
 void			apply(int operation, t_var_list *variable_list);
 int				calculate_line(char *line);
+#endif

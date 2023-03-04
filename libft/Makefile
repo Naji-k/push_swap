@@ -70,11 +70,11 @@ BONUS = $(addprefix src/, $(BONUS_FILES))
 REG_OBJS = ${SRC:.c=.o}
 OBJC_BONUS = ${BONUS:.c=.o}
 
-ifdef WITH_BONUS
+# ifdef WITH_BONUS
 OBJS = ${REG_OBJS} ${OBJC_BONUS}
-else
-OBJS = ${REG_OBJS}
-endif
+# else
+# OBJS = ${REG_OBJS}
+# endif
 
 all: ${NAME}
 
@@ -84,8 +84,8 @@ ${NAME}:	${OBJS}
 %.o : %.c
 		$(CC) -c $(FLAG) $(INCLUDE) $< -o $@
 
-bonus : 
-	$(MAKE) WITH_BONUS=1 all
+# bonus : 
+# 	$(MAKE) WITH_BONUS=1 all
 
 # for francinette
 # bonus: $(NAME) $(OBJC_BONUS)
