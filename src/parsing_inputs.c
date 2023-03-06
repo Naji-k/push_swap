@@ -71,26 +71,28 @@ static int	push_swap_check_valid_input(char *argv)
 
 int	parse_input(int argc, char **argv, t_var_list *variable_list)
 {
-	int	i;
-	int	num;
+	int		i;
+	int		num;
+	char	**input;
 
 	i = 1;
 	while (i < argc)
 	{
-		if (push_swap_check_valid_input(argv[i]) != -1)
+		input = ft_split(argv[i], ' ');
+		while (*input != NULL)
 		{
-			num = ft_atoi_overflow(argv[i]);
-			if (check_doubles(variable_list->stack_a, num))
+			if (push_swap_check_valid_input(*input) != -1)
 			{
-				write_error_exit(variable_list);
+				num = ft_atoi_overflow(*input);
+				if (check_doubles(variable_list->stack_a, num))
+					write_error_exit(variable_list);
+				add_last(&variable_list->stack_a, num);
+				input++;
 			}
-			add_last(&variable_list->stack_a, num);
-			i++;
+			else
+				write_error_exit(variable_list);
 		}
-		else
-		{
-			write_error_exit(variable_list);
-		}
+		i++;
 	}
 	return (i - 1);
 }

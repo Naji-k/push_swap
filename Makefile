@@ -64,7 +64,6 @@ gnl:
 
 clean:
 	rm -f $(OBJS) $(OBJS_BONUS) ${OBJS_SOLVER};
-	# rm $(LIB) $(LIB_BONUS);
 	@make clean -C $(GNL_DIR)
 	@make clean -C $(LIBFT_DIR)
 

@@ -31,8 +31,6 @@ int	main(int argc, char **argv)
 	if (argc >= 2)
 	{
 		i = parse_input(argc, argv, &variable_list);
-		if (i == 1)
-			return (0);
 		variable_list.size = stack_size(variable_list.stack_a);
 		insert_arr(&variable_list, &vars, variable_list.size);
 		array_insertion_sort(vars.array, variable_list.size);
