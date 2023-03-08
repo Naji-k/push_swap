@@ -19,8 +19,9 @@ FLAGS = -Wall -Wextra -Werror
 LIBFT_DIR = ./libft
 GNL_DIR = ./get_next_line
 
-LIB = $(LIBFT_DIR)/libft.a
-LIB_BONUS = $(GNL_DIR)/get_next_line.a
+LIB_LIBFT = $(LIBFT_DIR)/libft.a
+LIB_GNL = $(GNL_DIR)/get_next_line.a
+CC = cc
 
 
 FILES = circular_doubly_linked_list.c \
@@ -40,30 +41,34 @@ BONUS_FILES = src/checker.c
 SOLVER = src/main.c
 SRC = $(addprefix src/, $(FILES))
 
-OBJS = ${SRC:.c=.o}
-OBJS_SOLVER = ${SOLVER:.c=.o}
-OBJS_BONUS = ${BONUS_FILES:.c=.o}
+OBJS = $(SRC:.c=.o)
+OBJS_SOLVER =	$(OBJS) \
+				$(SOLVER:.c=.o)
+OBJS_BONUS = 	$(OBJS) \
+				$(BONUS_FILES:.c=.o)
 
-all:	$(NAME) bonus
+all:	$(NAME)
 
-$(NAME):	lib $(OBJS) $(OBJS_SOLVER)
-	@$(CC) $(OBJS) $(OBJS_SOLVER) $(INCLUDE) $(LIB) -o $@
+$(NAME):	$(LIB_LIBFT) $(OBJS_SOLVER)
+	$(CC) $(INCLUDE) $(OBJS_SOLVER) $(LIB_LIBFT) -o $(NAME)
 
-bonus: 	lib gnl ${OBJS} $(OBJS_BONUS)
-		@$(CC) $(FLAGS) ${OBJS} $(OBJS_BONUS) $(INCLUDE) $(LIB) $(LIB_BONUS) -o $(BONUS)
+bonus: $(BONUS)
+
+$(BONUS): 	$(LIB_LIBFT) $(LIB_GNL) $(OBJS_BONUS)
+		$(CC) $(FLAGS) $(INCLUDE) $(OBJS_BONUS) $(LIB_LIBFT) $(LIB_GNL) -o $(BONUS)
 
 %.o: %.c
-	$(CC) -c $(FLAGS) $(INCLUDE) $< -o $@
+	$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
-lib:
-	@make -sC $(LIBFT_DIR)
+$(LIB_LIBFT):
+	@make -C $(LIBFT_DIR)
 
-gnl:
-	@make -sC$(GNL_DIR)
+$(LIB_GNL):
+	@make -C $(GNL_DIR)
 
 
 clean:
-	rm -f $(OBJS) $(OBJS_BONUS) ${OBJS_SOLVER};
+	rm -f $(OBJS) $(OBJS_BONUS) $(OBJS_SOLVER);
 	@make clean -C $(GNL_DIR)
 	@make clean -C $(LIBFT_DIR)
 
